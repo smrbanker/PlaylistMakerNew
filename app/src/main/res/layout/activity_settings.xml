@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+   <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_back"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:backgroundTint="@color/white"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:icon="@drawable/icon_left_"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/zero"
+            app:iconTint="@color/black"
+            />
+
+       <FrameLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="start"
+               android:layout_marginTop="4dp"
+               android:layout_marginBottom="4dp"
+               android:paddingTop="14dp"
+               android:paddingBottom="16dp"
+               android:paddingLeft="12dp"
+               android:text="@string/app_settings"
+               android:textColor="@color/black"
+               android:textSize="22sp" />
+       </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:paddingTop="@dimen/text_M"
+                android:paddingBottom="@dimen/text_M"
+                android:paddingLeft="@dimen/text_S"
+                android:text="Темная тема"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <Switch
+                android:layout_width="56dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginRight="12dp"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/white" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:paddingTop="@dimen/text_M"
+                android:paddingBottom="@dimen/text_M"
+                android:paddingLeft="@dimen/text_S"
+                android:text="Поделиться приложением"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <Button
+                android:layout_width="@dimen/set_but"
+                android:layout_height="@dimen/set_but"
+                android:layout_marginTop="@dimen/but_T"
+                android:layout_marginEnd="@dimen/but_E"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/white"
+
+                app:icon="@drawable/icon_share_"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/zero"
+                app:iconTint="@color/gray" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:paddingTop="@dimen/text_M"
+                android:paddingBottom="@dimen/text_M"
+                android:paddingLeft="@dimen/text_S"
+                android:text="Написать в поддержку"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <Button
+                android:layout_width="@dimen/set_but"
+                android:layout_height="@dimen/set_but"
+                android:layout_marginTop="@dimen/but_T"
+                android:layout_marginEnd="@dimen/but_E"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/white"
+
+                app:icon="@drawable/icon_support_"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/zero"
+                app:iconTint="@color/gray" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:paddingTop="@dimen/text_M"
+                android:paddingBottom="@dimen/text_M"
+                android:paddingLeft="@dimen/text_S"
+                android:text="Пользовательское соглашение"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <Button
+                android:layout_width="@dimen/set_but"
+                android:layout_height="@dimen/set_but"
+                android:layout_marginTop="@dimen/but_T"
+                android:layout_marginEnd="@dimen/but_E"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/white"
+
+                app:icon="@drawable/icon_right_"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/zero"
+                app:iconTint="@color/gray" />
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

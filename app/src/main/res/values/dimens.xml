@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <dimen name="med_but">16dp</dimen>
+     <dimen name="zero">0dp</dimen>
+     <dimen name="set_but">24dp</dimen>
+     <dimen name="text_M">21dp</dimen>
+     <dimen name="text_S">16dp</dimen>
+     <dimen name="but_T">19dp</dimen>
+     <dimen name="but_E">12dp</dimen>
+     <dimen name="text_size">16sp</dimen>
+</resources>
