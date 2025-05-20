@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
    <LinearLayout
+        android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -62,7 +63,7 @@
                 android:paddingTop="@dimen/text_M"
                 android:paddingBottom="@dimen/text_M"
                 android:paddingLeft="@dimen/text_S"
-                android:text="Темная тема"
+                android:text="@string/black_theme"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size" />
 
@@ -70,12 +71,12 @@
                 android:layout_width="56dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="11dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="6dp"
                 android:layout_gravity="end"
                 android:backgroundTint="@color/white" />
         </FrameLayout>
 
-        <FrameLayout
+        <!--FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -87,23 +88,28 @@
                 android:paddingTop="@dimen/text_M"
                 android:paddingBottom="@dimen/text_M"
                 android:paddingLeft="@dimen/text_S"
-                android:text="Поделиться приложением"
+                android:text="@string/share"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size" />
 
-            <Button
+            <ImageView
                 android:layout_width="@dimen/set_but"
                 android:layout_height="@dimen/set_but"
                 android:layout_marginTop="@dimen/but_T"
                 android:layout_marginEnd="@dimen/but_E"
                 android:layout_gravity="end"
                 android:backgroundTint="@color/white"
-
-                app:icon="@drawable/icon_share_"
-                app:iconGravity="textStart"
-                app:iconPadding="@dimen/zero"
-                app:iconTint="@color/gray" />
-        </FrameLayout>
+                android:src="@drawable/icon_share_"/>
+        </FrameLayout-->
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/icon_share_"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="20dp"
+            android:text="@string/share"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -117,22 +123,18 @@
                 android:paddingTop="@dimen/text_M"
                 android:paddingBottom="@dimen/text_M"
                 android:paddingLeft="@dimen/text_S"
-                android:text="Написать в поддержку"
+                android:text="@string/support"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size" />
 
-            <Button
+            <ImageView
                 android:layout_width="@dimen/set_but"
                 android:layout_height="@dimen/set_but"
                 android:layout_marginTop="@dimen/but_T"
                 android:layout_marginEnd="@dimen/but_E"
                 android:layout_gravity="end"
                 android:backgroundTint="@color/white"
-
-                app:icon="@drawable/icon_support_"
-                app:iconGravity="textStart"
-                app:iconPadding="@dimen/zero"
-                app:iconTint="@color/gray" />
+                android:src="@drawable/icon_support_"/>
         </FrameLayout>
         <FrameLayout
             android:layout_width="match_parent"
@@ -146,23 +148,19 @@
                 android:paddingTop="@dimen/text_M"
                 android:paddingBottom="@dimen/text_M"
                 android:paddingLeft="@dimen/text_S"
-                android:text="Пользовательское соглашение"
+                android:text="@string/agreement"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size" />
 
-            <Button
+            <ImageView
                 android:layout_width="@dimen/set_but"
                 android:layout_height="@dimen/set_but"
                 android:layout_marginTop="@dimen/but_T"
                 android:layout_marginEnd="@dimen/but_E"
                 android:layout_gravity="end"
                 android:backgroundTint="@color/white"
-
-                app:icon="@drawable/icon_right_"
-                app:iconGravity="textStart"
-                app:iconPadding="@dimen/zero"
-                app:iconTint="@color/gray" />
-        </FrameLayout>
+                android:src="@drawable/icon_right_"/>
+            </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>
