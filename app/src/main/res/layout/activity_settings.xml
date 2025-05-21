@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/button_back"
             android:layout_width="56dp"
             android:layout_height="56dp"
@@ -20,11 +20,7 @@
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            app:icon="@drawable/icon_left_"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/zero"
-            app:iconTint="@color/black"
-            />
+            android:src="@drawable/icon_left_"/>
 
        <FrameLayout
            android:layout_width="match_parent"
@@ -73,7 +69,9 @@
                 android:layout_marginTop="11dp"
                 android:layout_marginRight="6dp"
                 android:layout_gravity="end"
-                android:backgroundTint="@color/white" />
+                android:backgroundTint="@color/white"
+                android:thumbTint="@color/switch_thumb_color"
+                android:trackTint="@color/switch_track_color"/>
         </FrameLayout>
 
         <!--FrameLayout

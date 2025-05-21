@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,7 +21,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val image4 = findViewById<Button>(R.id.button_back)
+        val image4 = findViewById<ImageView>(R.id.button_back)
 
         image4.setOnClickListener {
             finish()
