@@ -3,14 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/set_back"
     android:orientation="vertical">
 
    <LinearLayout
         android:id="@+id/settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        style="@style/SettingsScreenFrame">
 
         <ImageView
             android:id="@+id/button_back"
@@ -33,11 +31,12 @@
                android:layout_marginTop="4dp"
                android:layout_marginBottom="4dp"
                android:paddingTop="14dp"
-               android:paddingBottom="16dp"
+               android:paddingBottom="12dp"
                android:paddingLeft="12dp"
                android:text="@string/app_settings"
-               android:textColor="@color/black"
-               android:textSize="22sp" />
+               android:textColor="@color/set_font"
+               android:textSize="22sp"
+               android:fontFamily="@font/ys_display_regular"/>
        </FrameLayout>
     </LinearLayout>
 
@@ -48,20 +47,12 @@
         android:orientation="vertical">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            style="@style/SettingsScreenFrame"
+            android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:paddingTop="@dimen/text_M"
-                android:paddingBottom="@dimen/text_M"
-                android:paddingLeft="@dimen/text_S"
-                android:text="@string/black_theme"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
+                style="@style/SettingsScreenText"
+                android:text="@string/black_theme" />
 
             <Switch
                 android:layout_width="56dp"
@@ -74,32 +65,19 @@
                 android:trackTint="@color/switch_track_color"/>
         </FrameLayout>
 
-        <!--FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <FrameLayout
+            style="@style/SettingsScreenFrame">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:paddingTop="@dimen/text_M"
-                android:paddingBottom="@dimen/text_M"
-                android:paddingLeft="@dimen/text_S"
-                android:text="@string/share"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
+                style="@style/SettingsScreenText"
+                android:text="@string/share"/>
 
             <ImageView
-                android:layout_width="@dimen/set_but"
-                android:layout_height="@dimen/set_but"
-                android:layout_marginTop="@dimen/but_T"
-                android:layout_marginEnd="@dimen/but_E"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/white"
+                android:id="@+id/share_button"
+                style="@style/SettingsScreenImage"
                 android:src="@drawable/icon_share_"/>
-        </FrameLayout-->
-        <com.google.android.material.textview.MaterialTextView
+        </FrameLayout>
+        <!--com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/icon_share_"
@@ -107,56 +85,30 @@
             android:paddingVertical="20dp"
             android:text="@string/share"
             android:textSize="16sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"/-->
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            style="@style/SettingsScreenFrame">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:paddingTop="@dimen/text_M"
-                android:paddingBottom="@dimen/text_M"
-                android:paddingLeft="@dimen/text_S"
-                android:text="@string/support"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
+                style="@style/SettingsScreenText"
+                android:text="@string/support"/>
 
             <ImageView
-                android:layout_width="@dimen/set_but"
-                android:layout_height="@dimen/set_but"
-                android:layout_marginTop="@dimen/but_T"
-                android:layout_marginEnd="@dimen/but_E"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/white"
+                android:id="@+id/support_button"
+                style="@style/SettingsScreenImage"
                 android:src="@drawable/icon_support_"/>
         </FrameLayout>
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            style="@style/SettingsScreenFrame">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:paddingTop="@dimen/text_M"
-                android:paddingBottom="@dimen/text_M"
-                android:paddingLeft="@dimen/text_S"
-                android:text="@string/agreement"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
+                style="@style/SettingsScreenText"
+                android:text="@string/agreement"/>
 
             <ImageView
-                android:layout_width="@dimen/set_but"
-                android:layout_height="@dimen/set_but"
-                android:layout_marginTop="@dimen/but_T"
-                android:layout_marginEnd="@dimen/but_E"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/white"
+                android:id="@+id/agreement_button"
+                style="@style/SettingsScreenImage"
                 android:src="@drawable/icon_right_"/>
             </FrameLayout>
     </LinearLayout>

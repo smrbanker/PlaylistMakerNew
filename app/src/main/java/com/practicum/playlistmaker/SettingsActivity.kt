@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -29,10 +29,32 @@ class SettingsActivity : AppCompatActivity() {
             //startActivity(displayIntent)
         }
 
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }*/
+        val shareButton = findViewById<ImageView>(R.id.share_button)
+
+        shareButton.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.setType("text/plain")
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.course_link))
+            startActivity(shareIntent)
+        }
+
+        val supportButton = findViewById<ImageView>(R.id.support_button)
+
+        supportButton.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SENDTO)
+            shareIntent.data = Uri.parse("mailto:")
+            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_mail)))
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject))
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_text))
+            startActivity(shareIntent)
+        }
+
+        val agreementButton = findViewById<ImageView>(R.id.agreement_button)
+
+        agreementButton.setOnClickListener {
+            val address = Uri.parse(getString(R.string.agreement_link))
+            val shareIntent = Intent(Intent.ACTION_VIEW, address)
+            startActivity(shareIntent)
+        }
     }
 }

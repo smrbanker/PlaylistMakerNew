@@ -1,18 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:background="@color/set_back"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/search"
+    <LinearLayout
+        android:id="@+id/settings"
+        style="@style/SettingsScreenFrame">
+
+        <ImageView
+            android:id="@+id/button_back2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/set_back"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/icon_left_"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/ys_display_regular"
+            android:paddingLeft="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="10dp"
+            android:text="@string/app_search"
+            android:textColor="@color/set_font"
+            android:textFontWeight="500"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="Экран Поиска!"/>
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingEnd="16dp"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/inputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/corner"
+            android:drawableStart="@drawable/edit_search_"
+            android:drawablePadding="10dp"
+            android:hint="@string/app_search"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textColor="@color/set_font_edit"
+            android:textColorHint="@color/search_edit_text"
+            android:textCursorDrawable="@color/search_cursor"
+            />
+        <ImageView
+            android:id="@+id/search_button_visible"
+            style="@style/SearchClose"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="12dp"
+            android:visibility="gone" />
+
+
+    </FrameLayout>
+</LinearLayout>
