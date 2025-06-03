@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SettingsScreenText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:paddingTop">@dimen/text_M</item>
+        <item name="android:paddingBottom">@dimen/text_M</item>
+        <item name="android:paddingLeft">@dimen/text_S</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+    <style name="SettingsScreenImage">
+        <item name="android:layout_width">@dimen/set_but</item>
+        <item name="android:layout_height">@dimen/set_but</item>
+        <item name="android:layout_marginTop">@dimen/but_T</item>
+        <item name="android:layout_marginEnd">@dimen/but_E</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+    <style name="SettingsScreenFrame">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="SearchClose">
+        <item name="android:src">@drawable/light_mode_</item>
+    </style>
+    <style name="MainScreenButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/zero</item>
+        <item name="android:layout_marginStart">@dimen/med_but</item>
+        <item name="android:layout_marginEnd">@dimen/med_but</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="cornerRadius">@dimen/med_but</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/zero</item>
+        <item name="iconTint">@color/black</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+</resources>
+
+
+
+
