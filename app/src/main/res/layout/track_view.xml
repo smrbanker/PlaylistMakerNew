@@ -12,16 +12,16 @@
         android:id="@+id/search_track_image"
         android:layout_height="45dp"
         android:layout_width="45dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="13dp"
+        android:layout_marginTop="@dimen/track_view_margin"
+        android:layout_marginStart="@dimen/track_view_height"
         android:scaleType="fitCenter"
-        tools:src="@drawable/sun"
+        tools:src="@drawable/placeholder"
         />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/track_view_margin"
         >
 
         <LinearLayout
@@ -35,7 +35,7 @@
                 android:layout_height="19dp"
                 android:layout_width="match_parent"
                 android:layout_marginTop="14dp"
-                android:layout_marginEnd="44dp"
+                android:layout_marginEnd="@dimen/track_view_margin_large"
                 android:textColor="@color/search_font_song"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
@@ -48,16 +48,16 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="13dp"
+                android:layout_height="@dimen/track_view_height"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="44dp"
+                android:layout_marginEnd="@dimen/track_view_margin_large"
                 android:orientation="horizontal"
                 >
 
                 <TextView
                     android:id="@+id/search_track_singer"
                     android:layout_width="0dp"
-                    android:layout_height="13dp"
+                    android:layout_height="@dimen/track_view_height"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:ellipsize="end"
@@ -69,14 +69,14 @@
                     tools:text="The Beatles" />
 
                 <ImageView
-                    android:layout_height="13dp"
-                    android:layout_width="13dp"
+                    android:layout_height="@dimen/track_view_height"
+                    android:layout_width="@dimen/track_view_height"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic" />
 
                 <TextView
                     android:id="@+id/search_track_length"
-                    android:layout_height="13dp"
+                    android:layout_height="@dimen/track_view_height"
                     android:layout_width="64dp"
                     android:textColor="@color/search_font_author"
                     android:gravity="center_vertical"

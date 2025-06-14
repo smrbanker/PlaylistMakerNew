@@ -8,4 +8,11 @@
      <dimen name="but_T">19dp</dimen>
      <dimen name="but_E">12dp</dimen>
      <dimen name="text_size">16sp</dimen>
+
+     <dimen name="rCorners">10</dimen>
+
+     <dimen name="track_view_height">13dp</dimen>
+     <dimen name="track_view_margin">8dp</dimen>
+     <dimen name="track_view_margin_large">44dp</dimen>
+
 </resources>
