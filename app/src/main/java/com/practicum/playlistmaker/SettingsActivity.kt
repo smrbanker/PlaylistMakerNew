@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -9,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.core.net.toUri
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +25,6 @@ class SettingsActivity : AppCompatActivity() {
 
         image4.setOnClickListener {
             finish()
-            //val displayIntent = Intent(this, MainActivity::class.java)
-            //startActivity(displayIntent)
         }
 
         val shareButton = findViewById<ImageView>(R.id.share_button)
@@ -42,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
 
         supportButton.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SENDTO)
-            shareIntent.data = Uri.parse("mailto:")
+            shareIntent.data = "mailto:".toUri()
             shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_mail)))
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject))
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_text))
@@ -52,7 +50,7 @@ class SettingsActivity : AppCompatActivity() {
         val agreementButton = findViewById<ImageView>(R.id.agreement_button)
 
         agreementButton.setOnClickListener {
-            val address = Uri.parse(getString(R.string.agreement_link))
+            val address = getString(R.string.agreement_link).toUri()
             val shareIntent = Intent(Intent.ACTION_VIEW, address)
             startActivity(shareIntent)
         }
