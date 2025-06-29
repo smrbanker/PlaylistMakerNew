@@ -19,4 +19,6 @@
     <color name="search_font_author">#AEAFB4</color>
     <color name="search_elem_back">#FFFFFF</color>
     <color name="search_track_dot">#AEAFB4</color>
+    <color name="search_not_found">#1A1B22</color>
+    <color name="search_button">#FFFFFF</color>
 </resources>
