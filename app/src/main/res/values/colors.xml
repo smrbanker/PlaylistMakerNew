@@ -15,4 +15,8 @@
     <color name="search_edit_text">#AEAFB4</color>
     <color name="search_cursor">#3772E7</color>
     <color name="search_edit_field">#E6E8EB</color>
+    <color name="search_font_song">#FF000000</color>
+    <color name="search_font_author">#AEAFB4</color>
+    <color name="search_elem_back">#FFFFFF</color>
+    <color name="search_track_dot">#AEAFB4</color>
 </resources>

@@ -14,4 +14,10 @@
     <color name="set_left">#FFFFFFFF</color>
     <color name="search_edit_text">#1A1B22</color>
     <color name="search_edit_field">#FFFFFF</color>
+    <color name="search_font_song">#FFFFFFFF</color>
+    <color name="search_font_author">#FFFFFF</color>
+    <color name="search_elem_back">#1A1B22</color>
+    <color name="search_track_dot">#FFFFFF</color>
+
+
 </resources>

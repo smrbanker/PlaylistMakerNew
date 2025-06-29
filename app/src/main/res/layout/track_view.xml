@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="61dp"
+    android:orientation="horizontal"
+    android:background="@color/search_elem_back"
+    >
+
+    <ImageView
+        android:id="@+id/search_track_image"
+        android:layout_height="45dp"
+        android:layout_width="45dp"
+        android:layout_marginTop="@dimen/track_view_margin"
+        android:layout_marginStart="@dimen/track_view_height"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/placeholder"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/track_view_margin"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/search_track_song"
+                android:layout_height="19dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="@dimen/track_view_margin_large"
+                android:textColor="@color/search_font_song"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:fontFamily="@font/ys_display_regular"
+                tools:text="Yesterday (Remastered 2009)"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/track_view_height"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="@dimen/track_view_margin_large"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/search_track_singer"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/track_view_height"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/ys_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/search_font_author"
+                    android:textSize="11sp"
+                    tools:text="The Beatles" />
+
+                <ImageView
+                    android:layout_height="@dimen/track_view_height"
+                    android:layout_width="@dimen/track_view_height"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic" />
+
+                <TextView
+                    android:id="@+id/search_track_length"
+                    android:layout_height="@dimen/track_view_height"
+                    android:layout_width="64dp"
+                    android:textColor="@color/search_font_author"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/ys_display_regular"
+                    tools:text="5:44" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_right_" />
+
+    </FrameLayout>
+</LinearLayout>

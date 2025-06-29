@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,11 +15,11 @@
             android:id="@+id/button_back2"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:backgroundTint="@color/set_back"
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:src="@drawable/icon_left_"/>
+            android:backgroundTint="@color/set_back"
+            android:src="@drawable/icon_left_" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,8 +43,7 @@
         android:layout_height="52dp"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
-        android:paddingEnd="16dp"
-        >
+        android:paddingEnd="16dp">
 
         <EditText
             android:id="@+id/inputEditText"
@@ -62,8 +61,8 @@
             android:paddingRight="12dp"
             android:textColor="@color/set_font_edit"
             android:textColorHint="@color/search_edit_text"
-            android:textCursorDrawable="@color/search_cursor"
-            />
+            android:textCursorDrawable="@color/search_cursor" />
+
         <ImageView
             android:id="@+id/search_button_visible"
             style="@style/SearchClose"
@@ -74,6 +73,13 @@
             android:layout_marginEnd="12dp"
             android:visibility="gone" />
 
-
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        />
+
 </LinearLayout>
