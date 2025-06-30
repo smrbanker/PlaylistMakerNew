@@ -21,8 +21,8 @@ class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.placeholder)
-            .fitCenter()
-            .transform(RoundedCorners(R.dimen.rCorners))
+            .centerCrop()
+            .transform(RoundedCorners(10))
             .into(songLogo)
 
         songName.text = model.trackName
