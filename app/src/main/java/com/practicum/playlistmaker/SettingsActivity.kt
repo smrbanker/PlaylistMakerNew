@@ -3,12 +3,14 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.Switch
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.net.toUri
+import androidx.core.content.edit
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +55,17 @@ class SettingsActivity : AppCompatActivity() {
             val address = getString(R.string.agreement_link).toUri()
             val shareIntent = Intent(Intent.ACTION_VIEW, address)
             startActivity(shareIntent)
+        }
+
+        val themeSwitcher = findViewById<Switch>(R.id.themeSwitcher)
+        val sharedPrefs = getSharedPreferences(PM_PREFERENCES, MODE_PRIVATE)
+
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(SWITCH_KEY, false)
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            sharedPrefs.edit {
+                putBoolean(SWITCH_KEY, checked)
+            }
+            (applicationContext as App).switchTheme(checked)
         }
     }
 }

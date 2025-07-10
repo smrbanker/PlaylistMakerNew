@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -24,7 +25,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class SearchActivity : AppCompatActivity() {
 
     private val imdbBaseUrl = "https://itunes.apple.com"
@@ -40,9 +40,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var imageWrongButton : ImageView
     private lateinit var notFoundText : TextView
     private lateinit var wrongButton : Button
+    private lateinit var saveTrack : LinearLayout
+    private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var historyView: RecyclerView
 
     private val trackList = ArrayList<Track>()
-    val searchAdapter = SearchAdapter(trackList)
+    val historyListID = mutableListOf<Track>() // список "прокликанных" треков
+    val searchAdapter = SearchAdapter(trackList, onTrackClick = {trackID -> historyListID.add(trackID)})
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,14 +58,20 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
+        val sp = getSharedPreferences(SAVE_LIST, MODE_PRIVATE)
+        val searchHistory = SearchHistory(sp)
+        var trackListSP: Array<Track> = searchHistory.read(sp)
+        historyAdapter = HistoryAdapter(trackListSP)
+
         notFoundButton = findViewById<ImageView>(R.id.search_image_not_found)
         imageWrongButton = findViewById<ImageView>(R.id.search_image_wrong)
         notFoundText = findViewById<TextView>(R.id.search_text_not_found)
         wrongButton = findViewById<Button>(R.id.search_button_wrong)
+        saveTrack = findViewById<LinearLayout>(R.id.search_history)
 
-        val searchBack =
-            findViewById<ImageView>(R.id.button_back2) // возврат на главный экран
+        val searchBack = findViewById<ImageView>(R.id.button_back2) // возврат на главный экран
         searchBack.setOnClickListener {
+            searchHistory.write(sp,searchHistory.add(sp,historyListID))
             finish()
         }
 
@@ -75,6 +85,26 @@ class SearchActivity : AppCompatActivity() {
             imageWrongButton.visibility = View.GONE
             notFoundText.visibility = View.GONE
             wrongButton.visibility = View.GONE
+
+            searchHistory.write(sp,searchHistory.add(sp,historyListID))
+            trackListSP = searchHistory.read(sp)
+            historyAdapter = HistoryAdapter(trackListSP)
+            historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
+            historyView.adapter = historyAdapter
+            historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        }
+
+        val clearHistoryButton = findViewById<Button>(R.id.search_button_clear)
+
+        clearHistoryButton.setOnClickListener {
+            inputEditText.setText("")
+            hideKeyboard(inputEditText)
+            notFoundButton.visibility = View.GONE
+            imageWrongButton.visibility = View.GONE
+            notFoundText.visibility = View.GONE
+            wrongButton.visibility = View.GONE
+
+            searchHistory.clear(sp)
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -88,6 +118,8 @@ class SearchActivity : AppCompatActivity() {
                 trackList.clear()
                 searchAdapter.notifyDataSetChanged()
                 textFromEdit = s.toString()
+
+                saveTrack.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -110,6 +142,10 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            saveTrack.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
+        }
+
         wrongButton.setOnClickListener {
             imageWrongButton.visibility = View.GONE
             notFoundText.visibility = View.GONE
@@ -120,6 +156,10 @@ class SearchActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = searchAdapter
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
+        historyView.adapter = historyAdapter
+        historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
