@@ -60,7 +60,7 @@ class SearchActivity : AppCompatActivity() {
 
         val sp = getSharedPreferences(SAVE_LIST, MODE_PRIVATE)
         val searchHistory = SearchHistory(sp)
-        var trackListSP: Array<Track> = searchHistory.read(sp)
+        var trackListSP: Array<Track> = searchHistory.read()
         historyAdapter = HistoryAdapter(trackListSP)
 
         notFoundButton = findViewById<ImageView>(R.id.search_image_not_found)
@@ -69,9 +69,13 @@ class SearchActivity : AppCompatActivity() {
         wrongButton = findViewById<Button>(R.id.search_button_wrong)
         saveTrack = findViewById<LinearLayout>(R.id.search_history)
 
+        if (trackListSP.isEmpty()) {
+            saveTrack.visibility = View.GONE
+        }
+
         val searchBack = findViewById<ImageView>(R.id.button_back2) // возврат на главный экран
         searchBack.setOnClickListener {
-            searchHistory.write(sp,searchHistory.add(sp,historyListID))
+            searchHistory.write(searchHistory.add(historyListID))
             finish()
         }
 
@@ -86,12 +90,18 @@ class SearchActivity : AppCompatActivity() {
             notFoundText.visibility = View.GONE
             wrongButton.visibility = View.GONE
 
-            searchHistory.write(sp,searchHistory.add(sp,historyListID))
-            trackListSP = searchHistory.read(sp)
+            searchHistory.write(searchHistory.add(historyListID))
+            trackListSP = searchHistory.read()
             historyAdapter = HistoryAdapter(trackListSP)
             historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
             historyView.adapter = historyAdapter
             historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+            if (trackListSP.isEmpty()) {
+                saveTrack.visibility = View.GONE
+            } else {
+                saveTrack.visibility = View.VISIBLE
+            }
         }
 
         val clearHistoryButton = findViewById<Button>(R.id.search_button_clear)
@@ -104,7 +114,13 @@ class SearchActivity : AppCompatActivity() {
             notFoundText.visibility = View.GONE
             wrongButton.visibility = View.GONE
 
-            searchHistory.clear(sp)
+            searchHistory.clear()
+            trackListSP = searchHistory.read()
+            historyAdapter = HistoryAdapter(trackListSP)
+            historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
+            historyView.adapter = historyAdapter
+            historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            saveTrack.visibility = View.GONE
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -119,7 +135,7 @@ class SearchActivity : AppCompatActivity() {
                 searchAdapter.notifyDataSetChanged()
                 textFromEdit = s.toString()
 
-                saveTrack.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+                saveTrack.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true && trackListSP.isNotEmpty()) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -143,7 +159,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            saveTrack.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
+            saveTrack.visibility = if (hasFocus && inputEditText.text.isEmpty() && trackListSP.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
         wrongButton.setOnClickListener {

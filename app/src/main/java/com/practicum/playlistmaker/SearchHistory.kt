@@ -4,24 +4,24 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import androidx.core.content.edit
 
-class SearchHistory (sp : SharedPreferences) {
+class SearchHistory (private val sp : SharedPreferences) {
 
     val maxTrackNumber = 10
 
-    fun read (sp: SharedPreferences): Array<Track> {
+    fun read (): Array<Track> {
         val json = sp.getString(SAVE_KEY, null) ?: return emptyArray()
         return Gson().fromJson(json, Array<Track>::class.java)
     }
 
-    fun write (sp: SharedPreferences, track: MutableList<Track>) {
+    fun write (track: MutableList<Track>) {
         val json = Gson().toJson(track)
         sp.edit {
             putString(SAVE_KEY, json)
         }
     }
 
-    fun add (sp: SharedPreferences, newTrack: MutableList<Track>) : MutableList<Track> {
-        val tempTrack : Array<Track> = read(sp)
+    fun add (newTrack: MutableList<Track>) : MutableList<Track> {
+        val tempTrack : Array<Track> = read()
         val currentTrack : MutableList<Track> = mutableListOf()
         currentTrack.addAll(tempTrack)
         var newTrackID : Int
@@ -54,7 +54,7 @@ class SearchHistory (sp : SharedPreferences) {
         return currentTrack
     }
 
-    fun clear (sp: SharedPreferences) {
+    fun clear () {
         val currentTrack : List<Track> = emptyList()
         val json = Gson().toJson(currentTrack)
         sp.edit {
