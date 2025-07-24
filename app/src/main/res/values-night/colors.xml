@@ -20,5 +20,5 @@
     <color name="search_track_dot">#FFFFFF</color>
     <color name="search_not_found">#FFFFFF</color>
     <color name="search_button">#1A1B22</color>
-
+    <color name="player_backgroung">#FF000000</color>
 </resources>

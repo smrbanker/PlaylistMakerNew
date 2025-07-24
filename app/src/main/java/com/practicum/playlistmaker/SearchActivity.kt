@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +20,7 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.internal.ViewUtils.hideKeyboard
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,7 +48,14 @@ class SearchActivity : AppCompatActivity() {
 
     private val trackList = ArrayList<Track>()
     val historyListID = mutableListOf<Track>() // список "прокликанных" треков
-    val searchAdapter = SearchAdapter(trackList, onTrackClick = {trackID -> historyListID.add(trackID)})
+
+    val searchAdapter = SearchAdapter(trackList, onTrackClick = {trackID ->
+            historyListID.add(trackID)
+            val trackJson: String = Gson().toJson(trackID)
+            val displayIntent = Intent(this, PlayerActivity::class.java)
+            displayIntent.putExtra("extra", trackJson)
+            startActivity(displayIntent)
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +70,9 @@ class SearchActivity : AppCompatActivity() {
         val sp = getSharedPreferences(SAVE_LIST, MODE_PRIVATE)
         val searchHistory = SearchHistory(sp)
         var trackListSP: Array<Track> = searchHistory.read()
-        historyAdapter = HistoryAdapter(trackListSP)
+        historyAdapter = HistoryAdapter(trackListSP, onTrackClick = {trackID ->
+            callPlayerActivity(trackID)
+        })
 
         notFoundButton = findViewById<ImageView>(R.id.search_image_not_found)
         imageWrongButton = findViewById<ImageView>(R.id.search_image_wrong)
@@ -92,7 +103,9 @@ class SearchActivity : AppCompatActivity() {
 
             searchHistory.write(searchHistory.add(historyListID))
             trackListSP = searchHistory.read()
-            historyAdapter = HistoryAdapter(trackListSP)
+            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = {trackID ->
+                callPlayerActivity(trackID)
+            })
             historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
             historyView.adapter = historyAdapter
             historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -116,7 +129,9 @@ class SearchActivity : AppCompatActivity() {
 
             searchHistory.clear()
             trackListSP = searchHistory.read()
-            historyAdapter = HistoryAdapter(trackListSP)
+            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = {trackID ->
+                callPlayerActivity(trackID)
+            })
             historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
             historyView.adapter = historyAdapter
             historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -262,5 +277,13 @@ class SearchActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    fun callPlayerActivity (trackID : Track) {
+        historyListID.add(trackID)
+        val trackJson: String = Gson().toJson(trackID)
+        val displayIntent = Intent(this, PlayerActivity::class.java)
+        displayIntent.putExtra("extra", trackJson)
+        startActivity(displayIntent)
     }
 }

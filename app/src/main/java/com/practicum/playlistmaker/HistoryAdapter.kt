@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class HistoryAdapter(private val track: Array<Track>) : RecyclerView.Adapter<TrackViewHolder> () {
+class HistoryAdapter(private val track: Array<Track>, private val onTrackClick: (Track) -> Unit) : RecyclerView.Adapter<TrackViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
@@ -13,6 +13,9 @@ class HistoryAdapter(private val track: Array<Track>) : RecyclerView.Adapter<Tra
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(track[position])
+        holder.itemView.setOnClickListener {
+            onTrackClick.invoke(track[position])
+        }
     }
 
     override fun getItemCount(): Int {
