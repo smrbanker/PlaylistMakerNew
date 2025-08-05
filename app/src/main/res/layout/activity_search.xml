@@ -137,6 +137,9 @@
     </FrameLayout>
     <LinearLayout
         android:id="@+id/search_history"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         style="@style/SettingsScreenFrame"
         android:orientation="vertical"
         android:layout_marginTop="24dp"
@@ -155,7 +158,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewHistory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="8dp" />
 
         <com.google.android.material.button.MaterialButton
