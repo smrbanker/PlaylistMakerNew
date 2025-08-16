@@ -27,14 +27,6 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var play: ImageView        //кнопка play/stop
     private lateinit var timeRec: TextView      //переменная для секундомера
 
-    companion object {
-        private const val STATE_DEFAULT = 0     //статусы для проигрывателя
-        private const val STATE_PREPARED = 1    //статусы для проигрывателя
-        private const val STATE_PLAYING = 2     //статусы для проигрывателя
-        private const val STATE_PAUSED = 3      //статусы для проигрывателя
-        private const val DELAY = 300L          //задержка для обновления секундомера проигрывателя
-    }
-
     private var playerState = STATE_DEFAULT     //переменная для сохранения статуса проигрывателя
 
     private var mainThreadHandler: Handler? = null //handler для обратного отсчета
@@ -164,5 +156,12 @@ class PlayerActivity : AppCompatActivity() {
                 startPlayer()
             }
         }
+    }
+    companion object {
+        private const val STATE_DEFAULT = 0     //статусы для проигрывателя
+        private const val STATE_PREPARED = 1    //статусы для проигрывателя
+        private const val STATE_PLAYING = 2     //статусы для проигрывателя
+        private const val STATE_PAUSED = 3      //статусы для проигрывателя
+        private const val DELAY = 300L          //задержка для обновления секундомера проигрывателя
     }
 }

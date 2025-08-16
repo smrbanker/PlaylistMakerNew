@@ -67,13 +67,6 @@ class SearchActivity : AppCompatActivity() {
             startActivity(displayIntent)
     })
 
-    companion object {
-        const val EDIT_TEXT = "EDIT_TEXT"
-        const val TEXT_DEF = ""
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
-
     private var isClickAllowed = true //boolean для clickDebounce двойного нажатия
     private val handler = Handler(Looper.getMainLooper()) //handler для clickDebounce двойного нажатия
 
@@ -319,5 +312,17 @@ class SearchActivity : AppCompatActivity() {
             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
+    companion object {
+        const val EDIT_TEXT = "EDIT_TEXT"
+        const val TEXT_DEF = ""
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
