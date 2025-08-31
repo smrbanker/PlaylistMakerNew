@@ -1,28 +1,29 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.data.dto
 
 import android.content.SharedPreferences
-import com.google.gson.Gson
 import androidx.core.content.edit
+import com.google.gson.Gson
+import com.practicum.playlistmaker.ui.tracks.SAVE_KEY
 
 class SearchHistory (private val sp : SharedPreferences) {
 
     val maxTrackNumber = 10
 
-    fun read (): Array<Track> {
+    fun read (): Array<TrackDto> {
         val json = sp.getString(SAVE_KEY, null) ?: return emptyArray()
-        return Gson().fromJson(json, Array<Track>::class.java)
+        return Gson().fromJson(json, Array<TrackDto>::class.java)
     }
 
-    fun write (track: MutableList<Track>) {
+    fun write (track: MutableList<TrackDto>) {
         val json = Gson().toJson(track)
         sp.edit {
             putString(SAVE_KEY, json)
         }
     }
 
-    fun add (newTrack: MutableList<Track>) : MutableList<Track> {
-        val tempTrack : Array<Track> = read()
-        val currentTrack : MutableList<Track> = mutableListOf()
+    fun add (newTrack: MutableList<TrackDto>) : MutableList<TrackDto> {
+        val tempTrack : Array<TrackDto> = read()
+        val currentTrack : MutableList<TrackDto> = mutableListOf()
         currentTrack.addAll(tempTrack)
         var newTrackID : Int
         var newTrackBool = true
@@ -55,7 +56,7 @@ class SearchHistory (private val sp : SharedPreferences) {
     }
 
     fun clear () {
-        val currentTrack : List<Track> = emptyList()
+        val currentTrack : List<TrackDto> = emptyList()
         val json = Gson().toJson(currentTrack)
         sp.edit {
             putString(SAVE_KEY, json)
