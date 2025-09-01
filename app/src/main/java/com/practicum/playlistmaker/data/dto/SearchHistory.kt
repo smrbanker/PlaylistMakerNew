@@ -21,7 +21,7 @@ class SearchHistory (private val sp : SharedPreferences) {
         }
     }
 
-    fun add (newTrack: MutableList<TrackDto>) : MutableList<TrackDto> {
+    fun add (newTrack: MutableList<TrackDto>) : List<TrackDto> {//MutableList<TrackDto> {
         val tempTrack : Array<TrackDto> = read()
         val currentTrack : MutableList<TrackDto> = mutableListOf()
         currentTrack.addAll(tempTrack)

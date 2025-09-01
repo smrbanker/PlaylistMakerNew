@@ -27,9 +27,6 @@
             android:name=".ui.tracks.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tracks.MessageActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.tracks.SettingsActivity"
             android:exported="false" />
         <activity

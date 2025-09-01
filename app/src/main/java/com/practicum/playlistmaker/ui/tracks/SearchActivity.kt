@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.ui.tracks
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -20,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.practicum.playlistmaker.ui.player.PlayerActivity
@@ -30,6 +30,7 @@ import com.practicum.playlistmaker.data.network.TracksConverterImpl
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.domain.Creator
 import com.practicum.playlistmaker.domain.api.TracksInteractor
+import android.view.inputmethod.InputMethodManager
 
 const val PM_PREFERENCES = "pm_preferences"
 const val SAVE_LIST = "save_list"
@@ -98,7 +99,7 @@ class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer {
 
         val searchBack = findViewById<ImageView>(R.id.button_back2) // возврат на главный экран
         searchBack.setOnClickListener {
-            searchHistory.write(searchHistory.add(tracksConverter.listConvertToDto(historyListID).toMutableList()))
+            searchHistory.write(searchHistory.add(tracksConverter.listConvertToDto(historyListID).toMutableList()).toMutableList())
             finish()
         }
 
@@ -109,13 +110,13 @@ class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            //hideKeyboard(inputEditText)
+            hideSoftKeyboard(inputEditText)
             notFoundButton.visibility = View.GONE
             imageWrongButton.visibility = View.GONE
             notFoundText.visibility = View.GONE
             wrongButton.visibility = View.GONE
 
-            searchHistory.write(searchHistory.add(tracksConverter.listConvertToDto(historyListID).toMutableList()))
+            searchHistory.write(searchHistory.add(tracksConverter.listConvertToDto(historyListID).toMutableList()).toMutableList())
             trackListSP = tracksConverter.listConvertFromDto(searchHistory.read().toList()).toTypedArray()
             historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
                 if (clickDebounce()) {
@@ -136,7 +137,7 @@ class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer {
         val clearHistoryButton = findViewById<Button>(R.id.search_button_clear)
         clearHistoryButton.setOnClickListener {
             inputEditText.setText("")
-            //hideKeyboard(inputEditText)
+            hideSoftKeyboard(inputEditText)
             notFoundButton.visibility = View.GONE
             imageWrongButton.visibility = View.GONE
             notFoundText.visibility = View.GONE
@@ -314,6 +315,11 @@ class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(searchRunnable)
+    }
+
+    private fun hideSoftKeyboard(view: View) {
+        val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     companion object {

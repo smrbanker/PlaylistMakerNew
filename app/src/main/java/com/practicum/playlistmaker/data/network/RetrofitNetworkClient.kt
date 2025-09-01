@@ -6,9 +6,9 @@ import com.practicum.playlistmaker.data.dto.TracksSearchRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient : NetworkClient {
+const val imdbBaseUrl = "https://itunes.apple.com"
 
-    private val imdbBaseUrl = "https://itunes.apple.com"
+class RetrofitNetworkClient : NetworkClient {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(imdbBaseUrl)
