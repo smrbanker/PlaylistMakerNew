@@ -1,5 +1,6 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.tracks
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -19,32 +20,24 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.practicum.playlistmaker.ui.player.PlayerActivity
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.data.dto.SearchHistory
+import com.practicum.playlistmaker.data.network.TracksConverterImpl
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.Creator
+import com.practicum.playlistmaker.domain.api.TracksInteractor
+import android.view.inputmethod.InputMethodManager
 
 const val PM_PREFERENCES = "pm_preferences"
 const val SAVE_LIST = "save_list"
 const val SWITCH_KEY = "key_for_switch"
 const val SAVE_KEY = "key_for_save"
 
-class SearchActivity : AppCompatActivity() {
-
-    private val imdbBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(imdbBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesService = retrofit.create(iTunesAPI::class.java)
+class SearchActivity : AppCompatActivity(), TracksInteractor.TracksConsumer {
 
     private lateinit var notFoundButton : ImageView
     private lateinit var imageWrongButton : ImageView
@@ -56,15 +49,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchRunnable: Runnable
     private lateinit var progressBar : ProgressBar
 
+    private lateinit var tracksInteractor: TracksInteractor
+
     private val trackList = ArrayList<Track>()
     val historyListID = mutableListOf<Track>() // список "прокликанных" треков
 
-    val searchAdapter = SearchAdapter(trackList, onTrackClick = {trackID ->
-            historyListID.add(trackID)
-            val trackJson: String = Gson().toJson(trackID)
-            val displayIntent = Intent(this, PlayerActivity::class.java)
-            displayIntent.putExtra("extra", trackJson)
-            startActivity(displayIntent)
+    val searchAdapter = SearchAdapter(trackList, onTrackClick = { trackID ->
+        historyListID.add(trackID)
+        val trackJson: String = Gson().toJson(trackID)
+        val displayIntent = Intent(this, PlayerActivity::class.java)
+        displayIntent.putExtra("extra", trackJson)
+        startActivity(displayIntent)
     })
 
     private var isClickAllowed = true //boolean для clickDebounce двойного нажатия
@@ -74,17 +69,21 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { view, insets ->
-            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.updatePadding(top = statusBar.top)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        val tracksConverter = TracksConverterImpl()
         val sp = getSharedPreferences(SAVE_LIST, MODE_PRIVATE)
         val searchHistory = SearchHistory(sp)
-        var trackListSP: Array<Track> = searchHistory.read()
-        historyAdapter = HistoryAdapter(trackListSP, onTrackClick = {trackID ->
-            if (clickDebounce()) { callPlayerActivity(trackID)}     //задержка двойного нажатия
+        var trackListSP: Array<Track> = tracksConverter.listConvertFromDto((searchHistory.read()).toList()).toTypedArray()
+        historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
+            if (clickDebounce()) {
+                callPlayerActivity(trackID)
+            }     //задержка двойного нажатия
         })
 
         notFoundButton = findViewById<ImageView>(R.id.search_image_not_found)
@@ -100,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
 
         val searchBack = findViewById<ImageView>(R.id.button_back2) // возврат на главный экран
         searchBack.setOnClickListener {
-            searchHistory.write(searchHistory.add(historyListID))
+            searchHistory.write(searchHistory.add(tracksConverter.listConvertToDto(historyListID).toMutableList()).toMutableList())
             finish()
         }
 
@@ -111,16 +110,18 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            hideKeyboard(inputEditText)
+            hideSoftKeyboard(inputEditText)
             notFoundButton.visibility = View.GONE
             imageWrongButton.visibility = View.GONE
             notFoundText.visibility = View.GONE
             wrongButton.visibility = View.GONE
 
-            searchHistory.write(searchHistory.add(historyListID))
-            trackListSP = searchHistory.read()
-            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = {trackID ->
-                if (clickDebounce()) { callPlayerActivity(trackID)}     //задержка двойного нажатия
+            searchHistory.write(searchHistory.add(tracksConverter.listConvertToDto(historyListID).toMutableList()).toMutableList())
+            trackListSP = tracksConverter.listConvertFromDto(searchHistory.read().toList()).toTypedArray()
+            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
+                if (clickDebounce()) {
+                    callPlayerActivity(trackID)
+                }     //задержка двойного нажатия
             })
             historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
             historyView.adapter = historyAdapter
@@ -136,16 +137,18 @@ class SearchActivity : AppCompatActivity() {
         val clearHistoryButton = findViewById<Button>(R.id.search_button_clear)
         clearHistoryButton.setOnClickListener {
             inputEditText.setText("")
-            hideKeyboard(inputEditText)
+            hideSoftKeyboard(inputEditText)
             notFoundButton.visibility = View.GONE
             imageWrongButton.visibility = View.GONE
             notFoundText.visibility = View.GONE
             wrongButton.visibility = View.GONE
 
             searchHistory.clear()
-            trackListSP = searchHistory.read()
-            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = {trackID ->
-                if (clickDebounce()) { callPlayerActivity(trackID) }    //задержка двойного нажатия
+            trackListSP = tracksConverter.listConvertFromDto(searchHistory.read().toList()).toTypedArray()
+            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
+                if (clickDebounce()) {
+                    callPlayerActivity(trackID)
+                }    //задержка двойного нажатия
             })
             historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
             historyView.adapter = historyAdapter
@@ -208,6 +211,8 @@ class SearchActivity : AppCompatActivity() {
         historyView = findViewById<RecyclerView>(R.id.recyclerViewHistory)
         historyView.adapter = historyAdapter
         historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        tracksInteractor = Creator.provideTracksInteractor()
     }
 
     private fun searchDebounce() {
@@ -261,39 +266,32 @@ class SearchActivity : AppCompatActivity() {
             imageWrongButton.visibility = View.GONE
             notFoundText.visibility = View.GONE
             wrongButton.visibility = View.GONE
-
         }
     }
 
     fun iAPICall (inputEditText : TextView) {
         if (inputEditText.text.isNotEmpty()) {
             progressBar.visibility = View.VISIBLE
-            iTunesService.search(text = inputEditText.text.toString(), text2 = "song").enqueue(object :
-                Callback<iTinesResponse> {
-                override fun onResponse(call: Call<iTinesResponse>,
-                                        response: Response<iTinesResponse>
-                ) {
-                    progressBar.visibility = View.GONE
-                    if (response.isSuccessful) { //code() == 200) {
-                        trackList.clear()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            trackList.addAll(response.body()?.results!!)
-                            searchAdapter.notifyDataSetChanged()
-                        }
-                        if (trackList.isEmpty()) {
-                            showMessage(getString(R.string.nothing_found), "")
-                        } else {
-                            showMessage("", "")
-                        }
-                    } else {
-                        showMessage(getString(R.string.something_went_wrong), response.code().toString())
-                    }
-                }
+            searchTracks(inputEditText)
+        }
+    }
 
-                override fun onFailure(call: Call<iTinesResponse>, t: Throwable) {
-                    showMessage(getString(R.string.something_went_wrong), t.message.toString())
-                }
-            })
+    private fun searchTracks(inputEditText : TextView) {
+        tracksInteractor.searchTracks(inputEditText.text.toString(), "song", this)
+    }
+
+    override fun consume(foundTracks: List<Track>) {
+        trackList.clear()
+
+        if (foundTracks.isNotEmpty()) {
+            trackList.addAll(foundTracks)
+            val postRunnable = Runnable {
+                progressBar.visibility = View.GONE
+                searchAdapter.notifyDataSetChanged()
+            }
+            handler.post(postRunnable)
+        } else {
+            showMessage(getString(R.string.nothing_found), "")
         }
     }
 
@@ -317,6 +315,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(searchRunnable)
+    }
+
+    private fun hideSoftKeyboard(view: View) {
+        val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     companion object {
