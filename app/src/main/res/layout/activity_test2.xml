@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:padding="16dp"
-        tools:context=".ui.tracks.MainActivity">
+        tools:context=".main.ui.MainActivity">
 
         <Button
             android:id="@+id/display"
