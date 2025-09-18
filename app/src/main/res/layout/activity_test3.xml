@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:orientation="horizontal"
-        tools:context=".ui.tracks.MainActivity">
+        tools:context=".main.ui.MainActivity">
 
         <EditText
             android:id="@+id/inputEditText"
