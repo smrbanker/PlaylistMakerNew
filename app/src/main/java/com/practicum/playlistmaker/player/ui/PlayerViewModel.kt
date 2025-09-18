@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -30,27 +29,25 @@ class PlayerViewModel:ViewModel() {
 
     val playerInteractor = Creator.provideMediaPlayerInteractor()
     val mainThreadHandler = Handler(Looper.getMainLooper())
+    private var formatTime = "00:00"
 
-    private val playerState = MutableLiveData<Int>(STATE_DEFAULT)
-    val state: LiveData<Int> get() = playerState
-
-    private val infoState = MutableLiveData(Track())
-    val info : LiveData<Track> get() = infoState
+    val playerStateInfo = MutableLiveData(PlayerStateInfo(STATE_DEFAULT, "00:00"))
+    fun observePlayerStateInfo(): LiveData<PlayerStateInfo> = playerStateInfo
 
     fun resetInfo() {
         mainThreadHandler.removeCallbacksAndMessages(null)
-        infoState.value = info.value?.copy(currentPosition = "00:00")
     }
     private fun stopCountTimer() {
         updateTime().let { mainThreadHandler.removeCallbacks(it) }
     }
 
     fun preparePlayer(url : String) {
-        if (playerState.value == STATE_DEFAULT)
+        if (playerStateInfo.value?.state == STATE_DEFAULT)
             playerInteractor.prepare(
                 url,
-                onPrepared = { playerState.value = STATE_PREPARED },
-                onCompletion = { playerState.value = STATE_COMPLETE
+                onPrepared = { playerStateInfo.postValue(PlayerStateInfo(STATE_PREPARED, formatTime))},
+                onCompletion = {
+                                playerStateInfo.postValue(PlayerStateInfo(STATE_COMPLETE, "00:00"))
                                 resetInfo()
                                 stopCountTimer()
                 }
@@ -61,8 +58,8 @@ class PlayerViewModel:ViewModel() {
         return object : Runnable {
             override fun run() {
                 if (playerInteractor.isPlaying()) {
-                    val formatTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerInteractor.getCurrentPosition())
-                    infoState.value = info.value?.copy(currentPosition = formatTime)
+                    formatTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerInteractor.getCurrentPosition())
+                    playerStateInfo.postValue(PlayerStateInfo(STATE_PLAYING, formatTime))
                     mainThreadHandler.postDelayed(this, DELAY)
                 }
             }
@@ -71,12 +68,12 @@ class PlayerViewModel:ViewModel() {
 
     fun pausePlayer() {
         playerInteractor.pausePlayer()
-        playerState.value = STATE_PAUSED
+        playerStateInfo.postValue(PlayerStateInfo(STATE_PAUSED, formatTime))
         stopCountTimer()
     }
     fun startPlayer() {
         playerInteractor.startPlayer()
-        playerState.value = STATE_PLAYING
+        playerStateInfo.postValue(PlayerStateInfo(STATE_PLAYING, formatTime))
         mainThreadHandler.post(updateTime())
     }
 

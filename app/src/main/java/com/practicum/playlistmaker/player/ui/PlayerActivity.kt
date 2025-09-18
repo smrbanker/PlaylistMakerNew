@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
@@ -63,28 +62,25 @@ class PlayerActivity : AppCompatActivity() {
         val timeRec = binding.time
         val url: String = trackReady.previewUrl
 
-        viewModel.state.observe(this, { state ->
-            when (state) {
+        viewModel.observePlayerStateInfo().observe(this) { 
+            when (it.state) {
                 PlayerViewModel.STATE_PLAYING -> play.setImageResource(R.drawable.pause_button)
                 PlayerViewModel.STATE_PAUSED -> play.setImageResource(R.drawable.play_button)
                 PlayerViewModel.STATE_PREPARED -> play.setImageResource(R.drawable.play_button)
                 PlayerViewModel.STATE_COMPLETE -> play.setImageResource(R.drawable.play_button)
             }
-        })
+            timeRec.text = it.time
+        }
 
         viewModel.preparePlayer(url)
 
         play.setOnClickListener {
             playbackControl()
         }
-
-        viewModel.info.observe(this, Observer { info ->
-            timeRec.text = info.currentPosition
-        })
     }
 
     private fun playbackControl() {
-        when (viewModel.state.value) {
+        when (viewModel.playerStateInfo.value?.state) {
             PlayerViewModel.STATE_PLAYING -> viewModel.pausePlayer()
             PlayerViewModel.STATE_PREPARED -> viewModel.startPlayer()
             PlayerViewModel.STATE_PAUSED -> viewModel.startPlayer()

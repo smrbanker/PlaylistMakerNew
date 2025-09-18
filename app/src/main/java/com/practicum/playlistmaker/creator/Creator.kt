@@ -7,11 +7,15 @@ import com.practicum.playlistmaker.player.data.MediaPlayerRepositoriesImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositories
+import com.practicum.playlistmaker.search.data.HistoryRepository
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.data.network.TracksRepositoryImpl
+import com.practicum.playlistmaker.search.domain.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.TracksInteractorImpl
+import com.practicum.playlistmaker.search.domain.HistoryInteractorImpl
+import com.practicum.playlistmaker.search.data.HistoryRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.SwitchThemeInteractor
 import com.practicum.playlistmaker.settings.domain.SwitchThemeInteractorImpl
 import com.practicum.playlistmaker.settings.data.SwitchThemeRepository
@@ -30,12 +34,12 @@ object Creator {
     fun initCreatorApplication(application: Application) {
         this.application = application
     }
-    private fun getTracksRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
+    private fun getTracksRepository(context: Context): TracksRepository {
+        return TracksRepositoryImpl(RetrofitNetworkClient(context))
     }
 
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        return TracksInteractorImpl(getTracksRepository(context))
     }
 
     fun provideSharingInteractor() : SharingInteractor {
@@ -54,6 +58,14 @@ object Creator {
 
     fun provideSwitchThemeRepository() : SwitchThemeRepository {
         return SwitchThemeRepositoryImpl()
+    }
+
+    fun provideHistoryInteractor() : HistoryInteractor {
+        return HistoryInteractorImpl(provideHistoryRepository())
+    }
+
+    fun provideHistoryRepository() : HistoryRepository {
+        return HistoryRepositoryImpl(application)
     }
 
     fun provideSharedPreferences(key:String) : SharedPreferences {

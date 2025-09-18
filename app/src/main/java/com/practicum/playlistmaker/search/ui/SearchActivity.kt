@@ -57,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        viewModel = ViewModelProvider(this, SearchViewModel.getFactory())
+        viewModel = ViewModelProvider(this, SearchViewModel.getFactory(1))
             .get(SearchViewModel::class.java)
 
         viewModel?.observeState()?.observe(this) {
@@ -192,7 +192,7 @@ class SearchActivity : AppCompatActivity() {
         historyView.adapter = historyAdapter
         historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        tracksInteractor = Creator.provideTracksInteractor()
+        tracksInteractor = Creator.provideTracksInteractor(this)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -257,14 +257,20 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun showError(errorMessage: String) {
+        binding.progressBar.visibility = View.GONE
         binding.searchImageNotFound.visibility = View.GONE
         binding.searchTextNotFound.visibility = View.VISIBLE
         binding.searchImageWrong.visibility = View.VISIBLE
         binding.searchButtonWrong.visibility = View.VISIBLE
-        binding.searchTextNotFound.text = errorMessage
+        if (errorMessage == "-1") {
+            binding.searchTextNotFound.text = getString(R.string.something_went_wrong)
+        } else {
+            binding.searchTextNotFound.text = errorMessage
+        }
     }
 
     fun showEmpty() {
+        binding.progressBar.visibility = View.GONE
         binding.searchImageNotFound.visibility = View.VISIBLE
         binding.searchTextNotFound.visibility = View.VISIBLE
         binding.searchImageWrong.visibility = View.GONE
