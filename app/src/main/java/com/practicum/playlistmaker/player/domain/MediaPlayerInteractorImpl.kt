@@ -2,7 +2,8 @@ package com.practicum.playlistmaker.player.domain
 
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositories
 
-class MediaPlayerInteractorImpl(private val repository: MediaPlayerRepositories):MediaPlayerInteractor {
+class MediaPlayerInteractorImpl(private val repository: MediaPlayerRepositories) : MediaPlayerInteractor {
+
     override fun prepare(trackUrl: String, onPrepared: () -> Unit, onCompletion: () -> Unit) {
         return repository.prepare(trackUrl, onPrepared, onCompletion)
     }

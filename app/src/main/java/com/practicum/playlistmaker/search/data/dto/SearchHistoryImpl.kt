@@ -5,17 +5,17 @@ import androidx.core.content.edit
 import com.google.gson.Gson
 import com.practicum.playlistmaker.search.domain.api.SearchHistory
 
-class SearchHistoryImpl (private val sp : SharedPreferences) : SearchHistory <TrackDto> {
+class SearchHistoryImpl (private val sp : SharedPreferences, private val gson : Gson) : SearchHistory <TrackDto> {
 
     val maxTrackNumber = 10
 
     override fun read (): Array<TrackDto> {
         val json = sp.getString(SAVE_KEY, null) ?: return emptyArray()
-        return Gson().fromJson(json, Array<TrackDto>::class.java)
+        return gson.fromJson(json, Array<TrackDto>::class.java)
     }
 
     override fun write (track: MutableList<TrackDto>) {
-        val json = Gson().toJson(track)
+        val json = gson.toJson(track)
         sp.edit {
             putString(SAVE_KEY, json)
         }
@@ -57,7 +57,7 @@ class SearchHistoryImpl (private val sp : SharedPreferences) : SearchHistory <Tr
 
     override fun clear () {
         val currentTrack : List<TrackDto> = emptyList()
-        val json = Gson().toJson(currentTrack)
+        val json = gson.toJson(currentTrack)
         sp.edit {
             putString(SAVE_KEY, json)
         }
