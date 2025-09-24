@@ -34,39 +34,37 @@ val repositoryModule = module {
         androidContext().getSharedPreferences("key_for_switch", Context.MODE_PRIVATE)
     }
 
-    factory { Gson() }
-
     factory { MediaPlayer() }
 
-    single<MediaPlayerRepositories> {
+    factory<MediaPlayerRepositories> {
         MediaPlayerRepositoriesImpl(get())
     }
 
-    single<SearchHistory<TrackDto>>{
+    factory<SearchHistory<TrackDto>>{
         SearchHistoryImpl(get(qualifier = named("save")), get())
     }
 
-    single<TracksConverter> {
+    factory<TracksConverter> {
         TracksConverterImpl()
     }
 
-    single<HistoryRepository> {
+    factory<HistoryRepository> {
         HistoryRepositoryImpl(get(), get())
     }
 
-    single<TracksRepository> {
+    factory<TracksRepository> {
         TracksRepositoryImpl(get())
     }
 
-    single<SwitchThemeRepository> {
+    factory<SwitchThemeRepository> {
         SwitchThemeRepositoryImpl(get(qualifier = named("switch")))
     }
 
-    single<ExternalNavigatorRepository> {
+    factory<ExternalNavigatorRepository> {
         ExternalNavigatorRepositoryImpl(get())
     }
 
-    single<SharingRepository> {
+    factory<SharingRepository> {
         SharingRepositoryImpl(get())
     }
 }
