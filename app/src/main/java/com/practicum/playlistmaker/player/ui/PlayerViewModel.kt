@@ -5,14 +5,11 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel:ViewModel() {
+class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : ViewModel() {
     companion object {
         const val STATE_DEFAULT = 0
         const val STATE_PREPARED = 1
@@ -20,14 +17,8 @@ class PlayerViewModel:ViewModel() {
         const val STATE_PAUSED = 3
         const val STATE_COMPLETE = 4
         const val DELAY = 200L
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel()
-            }
-        }
     }
 
-    val playerInteractor = Creator.provideMediaPlayerInteractor()
     val mainThreadHandler = Handler(Looper.getMainLooper())
     private var formatTime = "00:00"
 
@@ -36,22 +27,31 @@ class PlayerViewModel:ViewModel() {
 
     fun resetInfo() {
         mainThreadHandler.removeCallbacksAndMessages(null)
+        playerInteractor.resetPlayer()
     }
     private fun stopCountTimer() {
         updateTime().let { mainThreadHandler.removeCallbacks(it) }
     }
 
     fun preparePlayer(url : String) {
-        if (playerStateInfo.value?.state == STATE_DEFAULT)
+        if (playerStateInfo.value?.state == STATE_DEFAULT) {
             playerInteractor.prepare(
                 url,
-                onPrepared = { playerStateInfo.postValue(PlayerStateInfo(STATE_PREPARED, formatTime))},
+                onPrepared = {
+                    playerStateInfo.postValue(
+                        PlayerStateInfo(
+                            STATE_PREPARED,
+                            formatTime
+                        )
+                    )
+                },
                 onCompletion = {
-                                playerStateInfo.postValue(PlayerStateInfo(STATE_COMPLETE, "00:00"))
-                                resetInfo()
-                                stopCountTimer()
+                    playerStateInfo.postValue(PlayerStateInfo(STATE_COMPLETE, "00:00"))
+                    resetInfo()
+                    stopCountTimer()
                 }
             )
+        }
     }
 
     private fun updateTime (): Runnable {
@@ -79,6 +79,10 @@ class PlayerViewModel:ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
+        resetInfo()
+    }
+
+    fun onDestroy() {
         resetInfo()
     }
 }

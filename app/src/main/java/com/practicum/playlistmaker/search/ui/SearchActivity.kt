@@ -21,11 +21,10 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.Track
-import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -33,12 +32,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var saveTrack : LinearLayout
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var historyView: RecyclerView
-    private lateinit var tracksInteractor: TracksInteractor
     private val trackList = ArrayList<Track>()
     val historyListID = mutableListOf<Track>() // список "прокликанных" треков
     private lateinit var simpleTextWatcher : TextWatcher
-    private var viewModel: SearchViewModel? = null
-    private var viewModelHistory: HistoryViewModel? = null
+    private val viewModel by viewModel<SearchViewModel>()
+    private val viewModelHistory by viewModel<HistoryViewModel>() //: HistoryViewModel? = null
     private lateinit var inputEditText : EditText
     private val handler = Handler(Looper.getMainLooper())
 
@@ -57,22 +55,17 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        viewModel = ViewModelProvider(this, SearchViewModel.getFactory(1))
-            .get(SearchViewModel::class.java)
 
-        viewModel?.observeState()?.observe(this) {
+        viewModel.observeState().observe(this) {
             render(it)
         }
-        viewModel?.observeShowToast()?.observe(this) {
+        viewModel.observeShowToast().observe(this) {
             showToast(it)
         }
 
-        viewModelHistory = ViewModelProvider(this, HistoryViewModel.getFactory(1))
-            .get(HistoryViewModel::class.java)
-
-        var trackListSP: Array<Track> = viewModelHistory?.trackRead()!!
+        var trackListSP: Array<Track> = viewModelHistory.trackRead()
         historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-            if (viewModel?.clickDebounce() ?: false) {
+            if (viewModel.clickDebounce()) {
                 callPlayerActivity(trackID)
             }
         })
@@ -85,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.buttonBack2.setOnClickListener { // возврат на главный экран
-            viewModelHistory?.trackWrite(historyListID)
+            viewModelHistory.trackWrite(historyListID)
             finish()
         }
 
@@ -97,10 +90,10 @@ class SearchActivity : AppCompatActivity() {
             binding.searchTextNotFound.visibility = View.GONE
             binding.searchButtonWrong.visibility = View.GONE
 
-            viewModelHistory?.trackWrite(historyListID)
-            trackListSP = viewModelHistory?.trackRead()!!
+            viewModelHistory.trackWrite(historyListID)
+            trackListSP = viewModelHistory.trackRead()
             historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-                if (viewModel?.clickDebounce() ?: false) {
+                if (viewModel.clickDebounce()) {
                     callPlayerActivity(trackID)
                 }
             })
@@ -123,10 +116,10 @@ class SearchActivity : AppCompatActivity() {
             binding.searchTextNotFound.visibility = View.GONE
             binding.searchButtonWrong.visibility = View.GONE
 
-            viewModelHistory?.trackClear()
-            trackListSP = viewModelHistory?.trackRead()!!
+            viewModelHistory.trackClear()
+            trackListSP = viewModelHistory.trackRead()
             historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-                if (viewModel?.clickDebounce() ?: false) {
+                if (viewModel.clickDebounce()) {
                     callPlayerActivity(trackID)
                 }
             })
@@ -150,7 +143,7 @@ class SearchActivity : AppCompatActivity() {
 
                 saveTrack.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true && trackListSP.isNotEmpty()) View.VISIBLE else View.GONE
 
-                viewModel?.searchDebounce(inputEditText)
+                viewModel.searchDebounce(inputEditText)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -167,7 +160,7 @@ class SearchActivity : AppCompatActivity() {
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel?.iAPICall(inputEditText)
+                viewModel.iAPICall(inputEditText)
                 true
             }
             false
@@ -181,7 +174,7 @@ class SearchActivity : AppCompatActivity() {
             binding.searchImageWrong.visibility = View.GONE
             binding.searchTextNotFound.visibility = View.GONE
             binding.searchButtonWrong.visibility = View.GONE
-            viewModel?.iAPICall(inputEditText)
+            viewModel.iAPICall(inputEditText)
         }
 
         val recyclerView = binding.recyclerView
@@ -191,8 +184,6 @@ class SearchActivity : AppCompatActivity() {
         historyView = binding.recyclerViewHistory
         historyView.adapter = historyAdapter
         historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        tracksInteractor = Creator.provideTracksInteractor(this)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -217,7 +208,8 @@ class SearchActivity : AppCompatActivity() {
 
     fun callPlayerActivity (trackID : Track) {
         historyListID.add(trackID)
-        val trackJson: String = Gson().toJson(trackID)
+        val gson : Gson by inject()
+        val trackJson: String = gson.toJson(trackID)
         val displayIntent = Intent(this, PlayerActivity::class.java)
         displayIntent.putExtra("extra", trackJson)
         startActivity(displayIntent)

@@ -11,7 +11,6 @@ class TracksInteractorImpl(private val repository: TracksRepository) : TracksInt
 
     override fun searchTracks(text: String, text2: String, consumer: TracksInteractor.TracksConsumer) {
         executor.execute {
-            //consumer.consume(repository.searchTracks(text, text2))
             val response = repository.searchTracks(text, text2)
             when (response) {
                 is Resource.Success -> {

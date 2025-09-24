@@ -1,20 +1,15 @@
 package com.practicum.playlistmaker.settings.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.settings.domain.SwitchThemeInteractor
+import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 
-class SettingsViewModel() : ViewModel() {
-    val sharingInteractor = Creator.provideSharingInteractor()
+class SettingsViewModel(private val sharingInteractor : SharingInteractor,
+                        private val switchThemeInteractor : SwitchThemeInteractor) : ViewModel() {
 
     fun shareApp() = sharingInteractor.shareApp()
     fun openSupport() = sharingInteractor.openSupport()
     fun openTerms() = sharingInteractor.openTerms()
-
-    val switchThemeInteractor = Creator.provideSwitchThemeInteractor()
-
     fun getTheme():Boolean{
         return switchThemeInteractor.getSharedPreferencesThemeValue()
     }
@@ -23,13 +18,5 @@ class SettingsViewModel() : ViewModel() {
     }
     fun switchTheme(checked: Boolean){
         switchThemeInteractor.switchTheme(checked)
-    }
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel()
-            }
-        }
     }
 }

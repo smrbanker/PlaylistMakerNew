@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -12,13 +11,16 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.search.domain.Track
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.getValue
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private val viewModel by viewModels<PlayerViewModel> { PlayerViewModel.getViewModelFactory() }
+    private val viewModel by viewModel<PlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +36,17 @@ class PlayerActivity : AppCompatActivity() {
         binding.menuButton.setOnClickListener {
             viewModel.pausePlayer()
             viewModel.resetInfo()
+            viewModel.onDestroy()
             finish()
         }
 
         val trackInJson: String? = intent.getStringExtra("extra")
-        val trackReady = Gson().fromJson(trackInJson, Track::class.java)
+        val gson : Gson by inject()
+        val trackReady = gson.fromJson(trackInJson, Track::class.java)
 
         val itemView = binding.itemView
         val songLogo = binding.cover
+
         val image: String? = trackReady.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
         Glide.with(itemView)
             .load(image)
@@ -62,7 +67,7 @@ class PlayerActivity : AppCompatActivity() {
         val timeRec = binding.time
         val url: String = trackReady.previewUrl
 
-        viewModel.observePlayerStateInfo().observe(this) { 
+        viewModel.observePlayerStateInfo().observe(this) {
             when (it.state) {
                 PlayerViewModel.STATE_PLAYING -> play.setImageResource(R.drawable.pause_button)
                 PlayerViewModel.STATE_PAUSED -> play.setImageResource(R.drawable.play_button)
