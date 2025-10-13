@@ -63,4 +63,10 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.6.1")
 
     implementation("io.insert-koin:koin-android:3.3.0")
+
+    implementation("com.google.android.material:material:1.8.0")
+
+    val fragment_version = "1.8.9"
+    implementation ("androidx.fragment:fragment-ktx:$fragment_version")
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
 }
