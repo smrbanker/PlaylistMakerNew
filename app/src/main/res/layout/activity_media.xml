@@ -44,7 +44,8 @@
         android:textSize="14sp"
         app:tabTextAppearance="@style/CustomTextAppearanceTab"
         app:tabTextColor="@color/set_font"
-        app:tabIndicatorColor="@color/set_font"/>
+        app:tabIndicatorColor="@color/set_font"
+        app:tabBackground="@color/set_back"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
