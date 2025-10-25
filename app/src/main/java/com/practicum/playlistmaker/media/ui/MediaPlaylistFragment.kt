@@ -29,8 +29,7 @@ class MediaPlaylistFragment : Fragment() {
 
     private lateinit var binding: FragmentMediaPlaylistBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMediaPlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }

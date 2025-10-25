@@ -28,8 +28,7 @@ class MediaTrackFragment : Fragment() {
 
     private lateinit var binding: FragmentMediaTrackBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMediaTrackBinding.inflate(inflater, container, false)
         return binding.root
     }

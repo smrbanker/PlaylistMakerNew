@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search_inactive"
+        android:title="@string/app_search"/>
+
+    <item
+        android:id="@+id/mediaFragment"
+        android:icon="@drawable/ic_media_inactive"
+        android:title="@string/app_media"/>
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings_inactive"
+        android:title="@string/app_settings"
+
+        android:fontFamily="@font/ys_display_regular"
+        android:textColor="@color/set_font"
+        android:textFontWeight="400"
+        android:textSize="12sp"/>
+</menu>
