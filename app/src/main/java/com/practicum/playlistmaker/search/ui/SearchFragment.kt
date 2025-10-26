@@ -29,18 +29,14 @@ import kotlin.getValue
 
 class SearchFragment : Fragment() {
 
-    companion object {
-        const val EDIT_TEXT = "EDIT_TEXT"
-        const val TEXT_DEF = ""
-    }
-
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private lateinit var saveTrack : LinearLayout
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var historyView: RecyclerView
     private lateinit var trackListSP: Array<Track>
     private val trackList = ArrayList<Track>()
-    val historyListID = mutableListOf<Track>() // список "прокликанных" треков
+    var historyListID = mutableListOf<Track>() // список "прокликанных" треков
     private lateinit var simpleTextWatcher : TextWatcher
     private val viewModel by viewModel<SearchViewModel>()
     private val viewModelHistory by viewModel<HistoryViewModel>() //: HistoryViewModel? = null
@@ -52,7 +48,7 @@ class SearchFragment : Fragment() {
     })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -81,11 +77,12 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchButtonVisible.setOnClickListener {
-            viewModelHistory.trackWrite(historyListID)
+            inputEditText.setText("")
             showHistory()
         }
 
         binding.searchButtonClear.setOnClickListener {
+            inputEditText.setText("")
             viewModelHistory.trackClear()
             showHistory()
         }
@@ -162,7 +159,9 @@ class SearchFragment : Fragment() {
     }
 
     fun callPlayerActivity (trackID : Track) {
+        historyListID.clear()
         historyListID.add(trackID)
+        viewModelHistory.trackWrite(historyListID)
         val gson : Gson by inject()
         val trackJson: String = gson.toJson(trackID)
         findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
@@ -225,7 +224,7 @@ class SearchFragment : Fragment() {
     }
 
     fun showHistory(){
-        inputEditText.setText("")
+        //inputEditText.setText("")
         hideSoftKeyboard(inputEditText)
         binding.searchImageNotFound.visibility = View.GONE
         binding.searchImageWrong.visibility = View.GONE
@@ -259,5 +258,11 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModelHistory.trackWrite(historyListID)
+        _binding = null
+    }
+
+    companion object {
+        const val EDIT_TEXT = "EDIT_TEXT"
+        const val TEXT_DEF = ""
     }
 }

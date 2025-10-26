@@ -20,17 +20,13 @@ import java.util.Locale
 import kotlin.getValue
 
 class PlayerFragment : Fragment() {
-    private lateinit var binding: FragmentPlayerBinding
+
+    private var _binding: FragmentPlayerBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModel<PlayerViewModel>()
 
-    companion object {
-        private const val EXTRA = "extra"
-
-        fun createArgs(extra: String): Bundle = bundleOf(EXTRA to extra)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentPlayerBinding.inflate(layoutInflater)
+        _binding = FragmentPlayerBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -95,5 +91,16 @@ class PlayerFragment : Fragment() {
             PlayerViewModel.STATE_PAUSED -> viewModel.startPlayer()
             PlayerViewModel.STATE_COMPLETE -> viewModel.startPlayer()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        private const val EXTRA = "extra"
+
+        fun createArgs(extra: String): Bundle = bundleOf(EXTRA to extra)
     }
 }

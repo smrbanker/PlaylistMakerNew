@@ -10,9 +10,6 @@ import com.practicum.playlistmaker.search.domain.Track
 
 class SearchAdapter(private val track: List<Track>, private val onTrackClick: (Track) -> Unit) : RecyclerView.Adapter<TrackViewHolder> () {
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
     private var isClickAllowed = true
 
     private val handler = Handler(Looper.getMainLooper())
@@ -42,5 +39,9 @@ class SearchAdapter(private val track: List<Track>, private val onTrackClick: (T
             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
