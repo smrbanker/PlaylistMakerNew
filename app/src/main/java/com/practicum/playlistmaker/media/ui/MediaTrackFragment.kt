@@ -12,24 +12,13 @@ import org.koin.core.parameter.parametersOf
 
 class MediaTrackFragment : Fragment() {
 
-    companion object {
-        private const val TRACK = "track"
-
-        fun newInstance(track: String) = MediaTrackFragment().apply {
-            arguments = Bundle().apply {
-                putString(TRACK, track)
-            }
-        }
-    }
-
     private val trackViewModel: MediaViewModelTrack by viewModel {
         parametersOf(requireArguments().getString(TRACK))
     }
 
     private lateinit var binding: FragmentMediaTrackBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMediaTrackBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -50,5 +39,15 @@ class MediaTrackFragment : Fragment() {
             binding.emptyMedia.visibility = View.VISIBLE
         }
         else binding.track.text = requireArguments().getString(TRACK).toString()
+    }
+
+    companion object {
+        private const val TRACK = "track"
+
+        fun newInstance(track: String) = MediaTrackFragment().apply {
+            arguments = Bundle().apply {
+                putString(TRACK, track)
+            }
+        }
     }
 }

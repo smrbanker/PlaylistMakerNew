@@ -13,24 +13,13 @@ import kotlin.getValue
 
 class MediaPlaylistFragment : Fragment() {
 
-    companion object {
-        private const val PLAYLIST = "playlist"
-
-        fun newInstance(playlist: String) = MediaPlaylistFragment().apply {
-            arguments = Bundle().apply {
-                putString(PLAYLIST, playlist)
-            }
-        }
-    }
-
     private val playlistViewModel: MediaViewModelPlaylist by viewModel {
         parametersOf(requireArguments().getString(PLAYLIST))
     }
 
     private lateinit var binding: FragmentMediaPlaylistBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMediaPlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -53,5 +42,15 @@ class MediaPlaylistFragment : Fragment() {
             binding.emptyPlaylist.visibility = View.VISIBLE
         }
         else binding.playlist.text = requireArguments().getString(PLAYLIST).toString()
+    }
+
+    companion object {
+        private const val PLAYLIST = "playlist"
+
+        fun newInstance(playlist: String) = MediaPlaylistFragment().apply {
+            arguments = Bundle().apply {
+                putString(PLAYLIST, playlist)
+            }
+        }
     }
 }

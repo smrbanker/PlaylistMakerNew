@@ -58,15 +58,20 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
 
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("androidx.activity:activity-ktx:1.6.1")
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.ktx)
 
-    implementation("io.insert-koin:koin-android:3.3.0")
+    implementation(libs.koin.android)
 
-    implementation("com.google.android.material:material:1.8.0")
+    implementation(libs.material.v180)
 
     val fragment_version = "1.8.9"
-    implementation ("androidx.fragment:fragment-ktx:$fragment_version")
-    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation (libs.androidx.fragment.ktx)
+    implementation (libs.androidx.viewpager2)
+
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.fragment.ktx.v156)
+
 }

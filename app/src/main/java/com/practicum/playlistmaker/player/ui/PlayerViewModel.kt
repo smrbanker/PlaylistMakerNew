@@ -10,15 +10,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : ViewModel() {
-    companion object {
-        const val STATE_DEFAULT = 0
-        const val STATE_PREPARED = 1
-        const val STATE_PLAYING = 2
-        const val STATE_PAUSED = 3
-        const val STATE_COMPLETE = 4
-        const val DELAY = 200L
-    }
-
     val mainThreadHandler = Handler(Looper.getMainLooper())
     private var formatTime = "00:00"
 
@@ -84,5 +75,14 @@ class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : V
 
     fun onDestroy() {
         resetInfo()
+    }
+
+    companion object {
+        const val STATE_DEFAULT = 0
+        const val STATE_PREPARED = 1
+        const val STATE_PLAYING = 2
+        const val STATE_PAUSED = 3
+        const val STATE_COMPLETE = 4
+        const val DELAY = 200L
     }
 }

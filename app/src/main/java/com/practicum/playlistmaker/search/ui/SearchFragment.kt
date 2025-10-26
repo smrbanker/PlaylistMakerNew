@@ -1,39 +1,42 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.Track
-import android.view.inputmethod.InputMethodManager
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
-    private lateinit var binding: ActivitySearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private lateinit var saveTrack : LinearLayout
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var historyView: RecyclerView
+    private lateinit var trackListSP: Array<Track>
     private val trackList = ArrayList<Track>()
-    val historyListID = mutableListOf<Track>() // список "прокликанных" треков
+    var historyListID = mutableListOf<Track>() // список "прокликанных" треков
     private lateinit var simpleTextWatcher : TextWatcher
     private val viewModel by viewModel<SearchViewModel>()
     private val viewModelHistory by viewModel<HistoryViewModel>() //: HistoryViewModel? = null
@@ -44,26 +47,22 @@ class SearchActivity : AppCompatActivity() {
         callPlayerActivity(trackID)
     })
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-        viewModel.observeShowToast().observe(this) {
+        viewModel.observeShowToast().observe(viewLifecycleOwner) {
             showToast(it)
         }
 
-        var trackListSP: Array<Track> = viewModelHistory.trackRead()
+        trackListSP = viewModelHistory.trackRead()
         historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
             if (viewModel.clickDebounce()) {
                 callPlayerActivity(trackID)
@@ -77,56 +76,15 @@ class SearchActivity : AppCompatActivity() {
             saveTrack.visibility = View.GONE
         }
 
-        binding.buttonBack2.setOnClickListener { // возврат на главный экран
-            viewModelHistory.trackWrite(historyListID)
-            finish()
-        }
-
         binding.searchButtonVisible.setOnClickListener {
             inputEditText.setText("")
-            hideSoftKeyboard(inputEditText)
-            binding.searchImageNotFound.visibility = View.GONE
-            binding.searchImageWrong.visibility = View.GONE
-            binding.searchTextNotFound.visibility = View.GONE
-            binding.searchButtonWrong.visibility = View.GONE
-
-            viewModelHistory.trackWrite(historyListID)
-            trackListSP = viewModelHistory.trackRead()
-            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-                if (viewModel.clickDebounce()) {
-                    callPlayerActivity(trackID)
-                }
-            })
-            historyView = binding.recyclerViewHistory
-            historyView.adapter = historyAdapter
-            historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-            if (trackListSP.isEmpty()) {
-                saveTrack.visibility = View.GONE
-            } else {
-                saveTrack.visibility = View.VISIBLE
-            }
+            showHistory()
         }
 
         binding.searchButtonClear.setOnClickListener {
             inputEditText.setText("")
-            hideSoftKeyboard(inputEditText)
-            binding.searchImageNotFound.visibility = View.GONE
-            binding.searchImageWrong.visibility = View.GONE
-            binding.searchTextNotFound.visibility = View.GONE
-            binding.searchButtonWrong.visibility = View.GONE
-
             viewModelHistory.trackClear()
-            trackListSP = viewModelHistory.trackRead()
-            historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-                if (viewModel.clickDebounce()) {
-                    callPlayerActivity(trackID)
-                }
-            })
-            historyView = binding.recyclerViewHistory
-            historyView.adapter = historyAdapter
-            historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            saveTrack.visibility = View.GONE
+            showHistory()
         }
 
         simpleTextWatcher = object : TextWatcher {
@@ -179,13 +137,12 @@ class SearchActivity : AppCompatActivity() {
 
         val recyclerView = binding.recyclerView
         recyclerView.adapter = searchAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         historyView = binding.recyclerViewHistory
         historyView.adapter = historyAdapter
-        historyView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        historyView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
-
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -201,27 +158,23 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(EDIT_TEXT, textFromEdit)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        textFromEdit = savedInstanceState.getString(EDIT_TEXT, TEXT_DEF)
-    }
-
     fun callPlayerActivity (trackID : Track) {
+        historyListID.clear()
         historyListID.add(trackID)
+        viewModelHistory.trackWrite(historyListID)
         val gson : Gson by inject()
         val trackJson: String = gson.toJson(trackID)
-        val displayIntent = Intent(this, PlayerActivity::class.java)
-        displayIntent.putExtra("extra", trackJson)
-        startActivity(displayIntent)
+        findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(trackJson))
     }
 
     private fun hideSoftKeyboard(view: View) {
-        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        manager.hideSoftInputFromWindow(view.windowToken, 0)
+        val imm = ContextCompat.getSystemService(view.context, InputMethodManager::class.java)
+        imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     fun render(state: SearchState) {
@@ -268,6 +221,44 @@ class SearchActivity : AppCompatActivity() {
         binding.searchImageWrong.visibility = View.GONE
         binding.searchButtonWrong.visibility = View.GONE
         binding.searchTextNotFound.text = getString(R.string.nothing_found)
+    }
+
+    fun showHistory(){
+        //inputEditText.setText("")
+        hideSoftKeyboard(inputEditText)
+        binding.searchImageNotFound.visibility = View.GONE
+        binding.searchImageWrong.visibility = View.GONE
+        binding.searchTextNotFound.visibility = View.GONE
+        binding.searchButtonWrong.visibility = View.GONE
+
+
+        trackListSP = viewModelHistory.trackRead()
+        historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
+            if (viewModel.clickDebounce()) {
+                callPlayerActivity(trackID)
+            }
+        })
+
+        historyView = binding.recyclerViewHistory
+        historyView.adapter = historyAdapter
+        historyView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        if (trackListSP.isEmpty()) {
+            saveTrack.visibility = View.GONE
+        } else {
+            saveTrack.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showHistory()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModelHistory.trackWrite(historyListID)
+        _binding = null
     }
 
     companion object {

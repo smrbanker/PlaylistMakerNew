@@ -23,4 +23,12 @@
     <color name="search_not_found">#1A1B22</color>
     <color name="search_button">#FFFFFF</color>
     <color name="player_background">#FFFFFFFF</color>
+
+    <color name="bottom_menu_text_false">#1A1B22</color>
+    <color name="bottom_menu_text_true">#3772E7</color>
+    <color name="bottom_menu_background_false">#FFFFFF</color>
+    <color name="bottom_menu_background_true">#FFFFFF</color>
+    <color name="bottom_menu_icon_false">#1A1B22</color>
+    <color name="bottom_menu_icon_true">#3772E7</color>
+
 </resources>
