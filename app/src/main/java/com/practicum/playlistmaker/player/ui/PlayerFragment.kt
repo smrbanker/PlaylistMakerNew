@@ -47,7 +47,7 @@ class PlayerFragment : Fragment() {
         val itemView = binding.itemView
         val songLogo = binding.cover
 
-        val image: String? = trackReady.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+        val image: String = trackReady.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
         Glide.with(itemView)
             .load(image)
             .placeholder(R.drawable.placeholder_large)

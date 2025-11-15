@@ -1,8 +1,6 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -15,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +22,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.Track
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
@@ -41,7 +41,6 @@ class SearchFragment : Fragment() {
     private val viewModel by viewModel<SearchViewModel>()
     private val viewModelHistory by viewModel<HistoryViewModel>() //: HistoryViewModel? = null
     private lateinit var inputEditText : EditText
-    private val handler = Handler(Looper.getMainLooper())
 
     val searchAdapter = SearchAdapter(trackList, onTrackClick = { trackID ->
         callPlayerActivity(trackID)
@@ -194,11 +193,10 @@ class SearchFragment : Fragment() {
         trackList.clear()
         trackList.addAll(trackListNew)
 
-        val postRunnable = Runnable {
+        viewLifecycleOwner.lifecycleScope.launch {
             binding.progressBar.visibility = View.GONE
             searchAdapter.notifyDataSetChanged()
         }
-        handler.post(postRunnable)
     }
 
     fun showError(errorMessage: String) {
@@ -224,7 +222,6 @@ class SearchFragment : Fragment() {
     }
 
     fun showHistory(){
-        //inputEditText.setText("")
         hideSoftKeyboard(inputEditText)
         binding.searchImageNotFound.visibility = View.GONE
         binding.searchImageWrong.visibility = View.GONE

@@ -7,7 +7,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityRootBinding
-import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 
 class RootActivity : AppCompatActivity() {
 
