@@ -6,13 +6,15 @@ import com.practicum.playlistmaker.search.data.dto.iTinesResponse
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.search.domain.api.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
-    override fun searchTracks(text: String, text2: String): Resource<List<Track>> {
+    override fun searchTracks(text: String, text2: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(text, text2))
         if (response.resultCode == 200) {
-            val trackList =  (response as iTinesResponse).results.map {
+            val trackList = (response as iTinesResponse).results.map {
                 Track(it.trackId,
                     it.trackName,
                     it.artistName,
@@ -23,9 +25,9 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                     it.primaryGenreName,
                     it.country,
                     it.previewUrl) }
-            return Resource.Success(trackList)
+            emit(Resource.Success(trackList))
         } else {
-            return Resource.Error(response.resultCode.toString())
+            emit(Resource.Error(response.resultCode.toString()))
         }
     }
 }
