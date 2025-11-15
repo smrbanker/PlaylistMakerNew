@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.utils.debounce
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val tracksInteractor : TracksInteractor): ViewModel() {
@@ -27,19 +26,6 @@ class SearchViewModel(private val tracksInteractor : TracksInteractor): ViewMode
             this.textInput = inputEditText.toString()
             trackSearchDebounce(inputEditText)
         }
-    }
-
-    private var isClickAllowed = true
-    fun clickDebounce(): Boolean {      //задержка для двойного нажатия
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewModelScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
     }
 
     fun iAPICall (inputEditText : TextView) {
@@ -81,7 +67,6 @@ class SearchViewModel(private val tracksInteractor : TracksInteractor): ViewMode
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

@@ -30,7 +30,7 @@ class SearchAdapter(private val track: List<Track>, private val onTrackClick: (T
     }
 
     private var isClickAllowed = true
-    private fun clickDebounce(): Boolean {      //задержка для двойного нажатия
+    fun clickDebounce(): Boolean {      //задержка для двойного нажатия
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false

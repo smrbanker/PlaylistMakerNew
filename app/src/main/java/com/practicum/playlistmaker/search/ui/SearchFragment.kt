@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
 
         trackListSP = viewModelHistory.trackRead()
         historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-            if (viewModel.clickDebounce()) {
+            if (searchAdapter.clickDebounce()) {
                 callPlayerActivity(trackID)
             }
         })
@@ -193,7 +193,7 @@ class SearchFragment : Fragment() {
         trackList.clear()
         trackList.addAll(trackListNew)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             binding.progressBar.visibility = View.GONE
             searchAdapter.notifyDataSetChanged()
         }
@@ -231,7 +231,7 @@ class SearchFragment : Fragment() {
 
         trackListSP = viewModelHistory.trackRead()
         historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-            if (viewModel.clickDebounce()) {
+            if (searchAdapter.clickDebounce()) {
                 callPlayerActivity(trackID)
             }
         })

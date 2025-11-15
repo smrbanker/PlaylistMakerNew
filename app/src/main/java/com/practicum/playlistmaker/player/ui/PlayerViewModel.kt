@@ -48,6 +48,7 @@ class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : V
     }
 
     private fun updateTimeC() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (playerInteractor.isPlaying()) {
                 formatTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerInteractor.getCurrentPosition())
@@ -84,6 +85,6 @@ class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : V
         const val STATE_PLAYING = 2
         const val STATE_PAUSED = 3
         const val STATE_COMPLETE = 4
-        const val DELAY = 200L
+        const val DELAY = 300L
     }
 }
