@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
 
         trackListSP = viewModelHistory.trackRead()
         historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-            if (searchAdapter.clickDebounce()) {
+            if (viewModel.clickDebounce()) {
                 callPlayerActivity(trackID)
             }
         })
@@ -231,7 +231,7 @@ class SearchFragment : Fragment() {
 
         trackListSP = viewModelHistory.trackRead()
         historyAdapter = HistoryAdapter(trackListSP, onTrackClick = { trackID ->
-            if (searchAdapter.clickDebounce()) {
+            if (viewModel.clickDebounce()) {
                 callPlayerActivity(trackID)
             }
         })
