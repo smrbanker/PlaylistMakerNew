@@ -19,6 +19,7 @@ class PlayerViewModel (
 ) : ViewModel() {
     private var formatTime = "00:00"
     private var timerJob: Job? = null
+    private var favourJob: Job? = null
 
     val playerStateInfo = MutableLiveData(PlayerStateInfo(STATE_DEFAULT, "00:00"))
     fun observePlayerStateInfo(): LiveData<PlayerStateInfo> = playerStateInfo
@@ -90,7 +91,7 @@ class PlayerViewModel (
     }
 
     fun checkFavourite(trackId: Int) {
-        viewModelScope.launch {
+        favourJob = viewModelScope.launch {
             favouriteInteractor.favouriteTracksID().collect {value ->
                 if (trackId in value) renderFavorite(true)
                 else renderFavorite(false)
@@ -109,6 +110,7 @@ class PlayerViewModel (
 
     fun onDestroy() {
         resetInfo()
+        favourJob?.cancel()
     }
 
     companion object {
