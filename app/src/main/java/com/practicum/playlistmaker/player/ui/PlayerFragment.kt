@@ -64,8 +64,11 @@ class PlayerFragment : Fragment() {
         binding.albumCountry.text = trackReady.country
 
         val play = binding.playbutton
+        val favour = binding.likebutton
         val timeRec = binding.time
         val url: String = trackReady.previewUrl
+
+        viewModel.checkFavourite(trackReady.trackId)
 
         viewModel.observePlayerStateInfo().observe(viewLifecycleOwner) {
             when (it.state) {
@@ -77,10 +80,21 @@ class PlayerFragment : Fragment() {
             timeRec.text = it.time
         }
 
+        viewModel.observeFavouriteInfo().observe(viewLifecycleOwner) {
+            when (it) {
+                true -> favour.setImageResource(R.drawable.like_button_on)
+                false -> favour.setImageResource(R.drawable.like_button_off)
+            }
+        }
+
         viewModel.preparePlayer(url)
 
         play.setOnClickListener {
             playbackControl()
+        }
+
+        favour.setOnClickListener {
+            viewModel.changeFavourite(trackReady)
         }
     }
 
@@ -100,7 +114,6 @@ class PlayerFragment : Fragment() {
 
     companion object {
         private const val EXTRA = "extra"
-
         fun createArgs(extra: String): Bundle = bundleOf(EXTRA to extra)
     }
 }

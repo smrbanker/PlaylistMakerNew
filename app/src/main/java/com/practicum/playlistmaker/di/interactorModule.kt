@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.media.domain.db.FavouriteInteractor
+import com.practicum.playlistmaker.media.domain.impl.FavouriteInteractorImpl
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.search.domain.HistoryInteractor
@@ -32,6 +34,10 @@ val interactorModule = module {
 
     factory<MediaPlayerInteractor> {
         MediaPlayerInteractorImpl(get())
+    }
+
+    single<FavouriteInteractor> {
+        FavouriteInteractorImpl(get())
     }
 
 }

@@ -16,11 +16,11 @@ class MediaPlaylistFragment : Fragment() {
     private val playlistViewModel: MediaViewModelPlaylist by viewModel {
         parametersOf(requireArguments().getString(PLAYLIST))
     }
-
-    private lateinit var binding: FragmentMediaPlaylistBinding
+    private var _binding: FragmentMediaPlaylistBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentMediaPlaylistBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaPlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -42,6 +42,11 @@ class MediaPlaylistFragment : Fragment() {
             binding.emptyPlaylist.visibility = View.VISIBLE
         }
         else binding.playlist.text = requireArguments().getString(PLAYLIST).toString()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

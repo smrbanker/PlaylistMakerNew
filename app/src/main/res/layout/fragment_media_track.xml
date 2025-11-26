@@ -3,12 +3,11 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView android:id="@+id/track"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="20sp"
-        android:textColor="@color/black" />
+        android:layout_marginTop="16dp" />
 
     <ImageView
         android:id="@+id/search_image_not_found"

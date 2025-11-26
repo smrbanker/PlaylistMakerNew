@@ -17,7 +17,8 @@ class TracksConverterImpl() : TracksConverter {
             track.releaseDate,
             track.primaryGenreName,
             track.country,
-            track.previewUrl
+            track.previewUrl,
+            track.isFavorite
         )
     }
 
@@ -31,7 +32,8 @@ class TracksConverterImpl() : TracksConverter {
             track.releaseDate,
             track.primaryGenreName,
             track.country,
-            track.previewUrl)
+            track.previewUrl,
+            isFavorite = track.isFavorite)
     }
 
     override fun listConvertToDto(tracks: List<Track>): List<TrackDto> {
@@ -48,7 +50,8 @@ class TracksConverterImpl() : TracksConverter {
                 track.releaseDate,
                 track.primaryGenreName,
                 track.country,
-                track.previewUrl
+                track.previewUrl,
+                track.isFavorite
             )
             returnList.add(returnTrack) }
 
@@ -68,7 +71,8 @@ class TracksConverterImpl() : TracksConverter {
                 track.releaseDate,
                 track.primaryGenreName,
                 track.country,
-                track.previewUrl)
+                track.previewUrl,
+                isFavorite = track.isFavorite)
             returnList.add(returnTrack) }
 
         return returnList

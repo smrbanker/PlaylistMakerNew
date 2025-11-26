@@ -13,5 +13,6 @@ data class Track(
     val primaryGenreName: String = "",                                   // Жанр
     val country: String = "",                                            // Страна исполнителя
     val previewUrl: String = "",                                         // Ссылка на 30 сек отрывок
-    val currentPosition : String = "00:00"
+    val currentPosition : String = "00:00",                              // Текущее время проигрывания
+    var isFavorite: Boolean = false                                      // Признак добавления в Избранное
 )

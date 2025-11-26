@@ -2,6 +2,8 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import com.practicum.playlistmaker.media.data.FavouriteRepositoryImpl
+import com.practicum.playlistmaker.media.domain.db.FavouriteRepository
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositories
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoriesImpl
 import com.practicum.playlistmaker.search.data.HistoryRepository
@@ -19,6 +21,7 @@ import com.practicum.playlistmaker.sharing.data.repository.ExternalNavigatorRepo
 import com.practicum.playlistmaker.sharing.data.repository.ExternalNavigatorRepositoryImpl
 import com.practicum.playlistmaker.sharing.data.repository.SharingRepository
 import com.practicum.playlistmaker.sharing.data.repository.SharingRepositoryImpl
+import com.practicum.playlistmaker.utils.TrackDbConvertor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -40,7 +43,7 @@ val repositoryModule = module {
     }
 
     factory<SearchHistory<TrackDto>>{
-        SearchHistoryImpl(get(qualifier = named("save")), get())
+        SearchHistoryImpl(get(qualifier = named("save")), get(), get())
     }
 
     factory<TracksConverter> {
@@ -52,7 +55,7 @@ val repositoryModule = module {
     }
 
     factory<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(get(), get())
     }
 
     factory<SwitchThemeRepository> {
@@ -65,5 +68,11 @@ val repositoryModule = module {
 
     factory<SharingRepository> {
         SharingRepositoryImpl(get())
+    }
+
+    factory { TrackDbConvertor() }
+
+    single<FavouriteRepository> {
+        FavouriteRepositoryImpl(get(), get())
     }
 }

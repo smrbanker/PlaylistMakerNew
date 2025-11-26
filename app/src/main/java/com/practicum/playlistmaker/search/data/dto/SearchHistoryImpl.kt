@@ -3,15 +3,28 @@ package com.practicum.playlistmaker.search.data.dto
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.gson.Gson
+import com.practicum.playlistmaker.media.data.AppDatabase
 import com.practicum.playlistmaker.search.domain.api.SearchHistory
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class SearchHistoryImpl (private val sp : SharedPreferences, private val gson : Gson) : SearchHistory <TrackDto> {
+class SearchHistoryImpl (
+    private val sp : SharedPreferences,
+    private val gson : Gson,
+    private val appDatabase: AppDatabase
+) : SearchHistory <TrackDto> {
 
     val maxTrackNumber = 10
 
     override fun read (): Array<TrackDto> {
         val json = sp.getString(SAVE_KEY, null) ?: return emptyArray()
-        return gson.fromJson(json, Array<TrackDto>::class.java)
+        val arrayTrackDto = gson.fromJson(json, Array<TrackDto>::class.java)
+        GlobalScope.launch {
+            for (elem in arrayTrackDto) {
+                elem.isFavorite = isLiked(elem.trackId)
+            }
+        }
+        return arrayTrackDto
     }
 
     override fun write (track: MutableList<TrackDto>) {
@@ -61,6 +74,10 @@ class SearchHistoryImpl (private val sp : SharedPreferences, private val gson : 
         sp.edit {
             putString(SAVE_KEY, json)
         }
+    }
+
+    private suspend fun isLiked(id : Int) : Boolean {
+        return id in appDatabase.trackDao().getTracksId()
     }
 
     companion object {
