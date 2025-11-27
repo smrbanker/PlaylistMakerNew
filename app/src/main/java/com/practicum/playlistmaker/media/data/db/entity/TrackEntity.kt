@@ -1,17 +1,20 @@
-package com.practicum.playlistmaker.search.data.dto
+package com.practicum.playlistmaker.media.data.db.entity
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class TrackDto(
+@Entity(tableName = "favourites")
+data class TrackEntity(
+    @PrimaryKey
     val trackId: Int,
     val trackName: String,                                          // Название композиции
     val artistName: String,                                         // Имя исполнителя
-    @SerializedName("trackTimeMillis") val trackTime: Int,  // Продолжительность трека
+    val trackTime: Int,                                             // Продолжительность трека
     val artworkUrl100: String,                                      // Ссылка на изображение обложки
     val collectionName: String,                                     // Название альбома
     val releaseDate: String,                                        // Год релиза
     val primaryGenreName: String,                                   // Жанр
     val country: String,                                            // Страна исполнителя
     val previewUrl: String,                                         // Ссылка на 30 сек отрывок
-    var isFavorite: Boolean = false                                 // Признак добавления в Избранное
+    val timeStamp: Long = System.currentTimeMillis()                // Системное время добавления трека
 )

@@ -12,8 +12,8 @@ class MediaViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecyc
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> MediaTrackFragment.newInstance("") //здесь можно поиграться и задать любое название
-            1 -> MediaPlaylistFragment.newInstance("") //здесь можно поиграться и задать любое название
+            0 -> MediaTrackFragment.newInstance("")
+            1 -> MediaPlaylistFragment.newInstance("")
             else -> MediaTrackFragment.newInstance("")
         }
     }

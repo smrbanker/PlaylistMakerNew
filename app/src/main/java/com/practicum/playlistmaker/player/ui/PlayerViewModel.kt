@@ -4,19 +4,28 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.media.domain.db.FavouriteInteractor
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
+import com.practicum.playlistmaker.search.domain.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : ViewModel() {
+class PlayerViewModel (
+    private val playerInteractor : MediaPlayerInteractor,
+    private val favouriteInteractor: FavouriteInteractor
+) : ViewModel() {
     private var formatTime = "00:00"
     private var timerJob: Job? = null
+    private var favourJob: Job? = null
 
     val playerStateInfo = MutableLiveData(PlayerStateInfo(STATE_DEFAULT, "00:00"))
     fun observePlayerStateInfo(): LiveData<PlayerStateInfo> = playerStateInfo
+
+    val favouriteInfo = MutableLiveData<Boolean>()
+    fun observeFavouriteInfo(): LiveData<Boolean> = favouriteInfo
 
     fun resetInfo() {
         timerJob?.cancel()
@@ -70,6 +79,30 @@ class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : V
         updateTimeC()
     }
 
+    fun changeFavourite(track: Track) {
+        viewModelScope.launch {
+            val favourite = favouriteInfo.value ?: false
+            if (favourite)
+                favouriteInteractor.deleteTrack(track)
+            else
+                favouriteInteractor.addTrack(track)
+            renderFavorite(!favourite)
+        }
+    }
+
+    fun checkFavourite(trackId: Int) {
+        favourJob = viewModelScope.launch {
+            favouriteInteractor.favouriteTracksID().collect {value ->
+                if (trackId in value) renderFavorite(true)
+                else renderFavorite(false)
+            }
+        }
+    }
+
+    private fun renderFavorite(favourite: Boolean) {
+        favouriteInfo.postValue(favourite)
+    }
+
     override fun onCleared() {
         super.onCleared()
         resetInfo()
@@ -77,6 +110,7 @@ class PlayerViewModel (private val playerInteractor : MediaPlayerInteractor) : V
 
     fun onDestroy() {
         resetInfo()
+        favourJob?.cancel()
     }
 
     companion object {

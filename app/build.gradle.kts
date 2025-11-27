@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -40,7 +41,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -66,7 +66,6 @@ dependencies {
 
     implementation(libs.material.v180)
 
-    val fragment_version = "1.8.9"
     implementation (libs.androidx.fragment.ktx)
     implementation (libs.androidx.viewpager2)
 
@@ -75,4 +74,8 @@ dependencies {
     implementation(libs.androidx.fragment.ktx.v156)
 
     implementation(libs.kotlinx.coroutines.android)
+
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }
