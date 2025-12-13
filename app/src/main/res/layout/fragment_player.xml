@@ -309,12 +309,12 @@
 
     <LinearLayout android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="505dp"
         android:orientation="vertical"
         android:background="@drawable/bottom_sheet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="440dp"
+        app:behavior_peekHeight="505dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <TextView
@@ -351,8 +351,5 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             />
-
-
     </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

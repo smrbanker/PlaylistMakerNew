@@ -6,9 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toUri
-import com.practicum.playlistmaker.media.data.db.dao.PlaylistDao
 import com.practicum.playlistmaker.media.data.db.entity.PlaylistEntity
-import com.practicum.playlistmaker.media.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.media.domain.db.PlaylistsRepository
 import com.practicum.playlistmaker.search.domain.Playlist
 import com.practicum.playlistmaker.search.domain.Track
@@ -39,10 +37,6 @@ class PlaylistsRepositoryImpl(
         appDatabase.playlistDao().insertPlaylistEntity(playlistDbConvertor.map(playlistWithImage))
     }
 
-    override suspend fun deletePlaylist(playlistId: Int) {
-        appDatabase.playlistDao().deletePlaylist(playlistId)
-    }
-
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
         val playlists = appDatabase.playlistDao().getPlaylists()
         emit(convertFromPlaylistEntity(playlists))
@@ -68,5 +62,20 @@ class PlaylistsRepositoryImpl(
             }
         }
         return file.absolutePath
+    }
+
+    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        appDatabase.tracklistDao().insertTrack(trackListDbConvertor.map(track))
+        val playlistEntity = playlistDbConvertor.map(playlist)
+        val getPlaylistEntity = appDatabase.playlistDao().getPlaylistById(playlistEntity.playlistId)
+        val newTrackList = getPlaylistEntity?.playlistList + track.trackId + ","
+        appDatabase.playlistDao().updatePlaylistEntity(PlaylistEntity(
+            getPlaylistEntity?.playlistId ?: 0,
+            getPlaylistEntity?.playlistName ?: "",
+            getPlaylistEntity?.playlistDescription,
+            getPlaylistEntity?.playlistImage,
+            newTrackList,
+            getPlaylistEntity?.playlistCount?.plus(1) ?: 0)
+        )
     }
 }

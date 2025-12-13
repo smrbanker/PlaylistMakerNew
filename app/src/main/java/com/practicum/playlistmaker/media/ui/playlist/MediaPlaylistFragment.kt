@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMediaPlaylistBinding
-import com.practicum.playlistmaker.media.ui.playlist.MediaStatePlaylist
-import com.practicum.playlistmaker.media.ui.playlist.MediaViewModelPlaylist
 import com.practicum.playlistmaker.search.domain.Playlist
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf

@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.databinding.PlaylistItemBinding
-import com.practicum.playlistmaker.media.ui.playlist.MediaViewHolderPlaylist
 import com.practicum.playlistmaker.search.domain.Playlist
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

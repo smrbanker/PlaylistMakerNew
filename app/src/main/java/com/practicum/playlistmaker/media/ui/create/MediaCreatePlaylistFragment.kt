@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
-import com.practicum.playlistmaker.media.ui.create.MediaViewModelCreatePlaylist
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,7 +26,7 @@ class MediaCreatePlaylistFragment : Fragment() {
     var playlistName : String? = null
     var playlistDescription : String? = null
     var playlistUri : Uri? = null
-    private lateinit var dialog : MaterialAlertDialogBuilder
+    var dialog : MaterialAlertDialogBuilder? = null
     val viewModel by viewModel<MediaViewModelCreatePlaylist>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -78,7 +77,7 @@ class MediaCreatePlaylistFragment : Fragment() {
 
         binding.backButton.setOnClickListener {
             if((playlistUri != null) or (playlistName?.isNotEmpty() == true) or (playlistDescription?.isNotEmpty() == true )) {
-                dialog.show()
+                dialog?.show()
             } else {
                 findNavController().navigateUp()
             }
@@ -87,7 +86,7 @@ class MediaCreatePlaylistFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if ((playlistUri != null) or (playlistName?.isNotEmpty() == true) or (playlistDescription?.isNotEmpty() == true)) {
-                    dialog.show()
+                    dialog?.show()
                 } else {
                     findNavController().navigateUp()
                 }
@@ -98,7 +97,6 @@ class MediaCreatePlaylistFragment : Fragment() {
             if(playlistName?.isNotEmpty() == true) {
                 if(playlistUri != null) {
                     lifecycleScope.launch {
-                        //playlistUri = viewModel.saveImage(playlistUri!!)
                         viewModel.insertPlaylist(playlistName!!, playlistDescription, playlistUri.toString())
                     }
                 }
@@ -120,5 +118,6 @@ class MediaCreatePlaylistFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        dialog = null
     }
 }

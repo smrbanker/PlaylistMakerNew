@@ -31,5 +31,6 @@
     <color name="bottom_menu_icon_false">#1A1B22</color>
     <color name="bottom_menu_icon_true">#3772E7</color>
     <color name="FF">#FFFFFF</color>
+    <color name="graywhite">#AEAFB4</color>
 
 </resources>

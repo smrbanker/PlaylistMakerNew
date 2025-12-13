@@ -12,9 +12,6 @@ interface TrackListDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(track: TrackListEntity)
 
-    @Query("DELETE FROM tracklist WHERE trackId = :trackId")
-    suspend fun deleteTrackById(trackId: Int)
-
     @Query("SELECT * FROM tracklist WHERE trackId IN (:trackIds)")
     suspend fun getTracksByIds(trackIds: List<Int>): List<TrackListEntity>
 }

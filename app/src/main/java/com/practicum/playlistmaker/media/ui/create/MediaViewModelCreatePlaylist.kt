@@ -18,5 +18,4 @@ class MediaViewModelCreatePlaylist(private val playlistInteractor: PlaylistsInte
             )
         )
     }
-
 }

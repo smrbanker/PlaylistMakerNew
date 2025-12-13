@@ -10,7 +10,6 @@ import com.practicum.playlistmaker.media.ui.playlist.MediaStatePlaylist
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
 import com.practicum.playlistmaker.search.domain.Playlist
 import com.practicum.playlistmaker.search.domain.Track
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -133,10 +132,15 @@ class PlayerViewModel (
         }
     }
 
-    fun checkTrack(playlist: Playlist, id : String) {
+    fun checkTrack(playlist: Playlist, track : Track) {
         val trackArray = playlist.playlistList?.split(",")
-        if (trackArray?.contains(id) == true ) renderCheck(true, playlist.playlistName)
-        //else renderCheck(false)
+        if (trackArray?.contains(track.trackId.toString()) == true ) renderCheck(true, playlist.playlistName)
+        else {
+            viewModelScope.launch {
+                playlistsInteractor.addTrackToPlaylist(track, playlist)
+                renderCheck(false, playlist.playlistName)
+            }
+        }
     }
 
     private fun renderCheck(check: Boolean, name : String) {
@@ -154,18 +158,6 @@ class PlayerViewModel (
     private fun renderState(state: MediaStatePlaylist) {
         stateLiveData.postValue(state)
     }
-
-    //Добавляем трек в плейлист
-    //fun updatePlaylist(playlist : Playlist) {
-    //    viewModelScope.launch(Dispatchers.IO) {
-    //        playlistsInteractor.updatePlaylist(playlist)
-    //    }
-    //}
-    //fun insertTrackInPlaylist(track: Track) {
-    //    viewModelScope.launch(Dispatchers.IO) {
-    //        playlistsInteractor.insertTrackInPlaylist(track)
-    //    }
-    //}
 
     private var isClickAllowed = true
     fun clickDebounce(): Boolean {      //задержка для двойного нажатия

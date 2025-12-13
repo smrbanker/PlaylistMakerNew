@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,9 +20,7 @@ class PlayerAdapterPlaylist(private val playlists: List<Playlist>, private val o
     override fun onBindViewHolder(holder: PlayerViewHolderPlaylist, position: Int) {
         holder.bind(playlists[position])
         holder.itemView.setOnClickListener {
-            Log.d("ADAPTER", "Вошел!!!")
             if (clickDebounce()) {
-                //***вот сюда не попадаю никогда!
                 onPlaylistClick.invoke(playlists[position])
             }
         }
