@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.media.domain.db.FavouriteInteractor
+import com.practicum.playlistmaker.media.domain.db.PlaylistsInteractor
+import com.practicum.playlistmaker.media.ui.playlist.MediaStatePlaylist
 import com.practicum.playlistmaker.player.domain.MediaPlayerInteractor
+import com.practicum.playlistmaker.search.domain.Playlist
 import com.practicum.playlistmaker.search.domain.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -15,7 +18,8 @@ import java.util.Locale
 
 class PlayerViewModel (
     private val playerInteractor : MediaPlayerInteractor,
-    private val favouriteInteractor: FavouriteInteractor
+    private val favouriteInteractor: FavouriteInteractor,
+    private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
     private var formatTime = "00:00"
     private var timerJob: Job? = null
@@ -26,6 +30,12 @@ class PlayerViewModel (
 
     val favouriteInfo = MutableLiveData<Boolean>()
     fun observeFavouriteInfo(): LiveData<Boolean> = favouriteInfo
+
+    val checkTrackInfo = MutableLiveData(PlayerCheckInfo(false, ""))
+    fun observeCheckInfo(): LiveData<PlayerCheckInfo> = checkTrackInfo
+
+    private val stateLiveData = MutableLiveData<MediaStatePlaylist>()
+    fun observePlaylistState(): LiveData<MediaStatePlaylist> = stateLiveData
 
     fun resetInfo() {
         timerJob?.cancel()
@@ -113,6 +123,55 @@ class PlayerViewModel (
         favourJob?.cancel()
     }
 
+    fun returnPlaylists() {
+        viewModelScope.launch {
+            playlistsInteractor.getPlaylists()
+                .collect{
+                        playlists -> processResults(playlists)
+                }
+        }
+    }
+
+    fun checkTrack(playlist: Playlist, track : Track) {
+        val trackArray = playlist.playlistList?.split(",")
+        if (trackArray?.contains(track.trackId.toString()) == true ) renderCheck(true, playlist.playlistName)
+        else {
+            viewModelScope.launch {
+                playlistsInteractor.addTrackToPlaylist(track, playlist)
+                renderCheck(false, playlist.playlistName)
+            }
+        }
+    }
+
+    private fun renderCheck(check: Boolean, name : String) {
+        checkTrackInfo.postValue(PlayerCheckInfo(check,name))
+    }
+
+    private fun processResults(playlists : List<Playlist>) {
+        if(playlists.isEmpty()) {
+            renderState(MediaStatePlaylist.Empty(""))
+        } else {
+            renderState(MediaStatePlaylist.Content(playlists))
+        }
+    }
+
+    private fun renderState(state: MediaStatePlaylist) {
+        stateLiveData.postValue(state)
+    }
+
+    private var isClickAllowed = true
+    fun clickDebounce(): Boolean {      //задержка для двойного нажатия
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewModelScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
     companion object {
         const val STATE_DEFAULT = 0
         const val STATE_PREPARED = 1
@@ -120,5 +179,6 @@ class PlayerViewModel (
         const val STATE_PAUSED = 3
         const val STATE_COMPLETE = 4
         const val DELAY = 300L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
