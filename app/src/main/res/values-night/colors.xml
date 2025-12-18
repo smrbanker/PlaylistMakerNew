@@ -28,5 +28,6 @@
     <color name="bottom_menu_background_true">#1A1B22</color>
     <color name="bottom_menu_icon_false">#FFFFFF</color>
     <color name="bottom_menu_icon_true">#3772E7</color>
+    <color name="graywhite">#FFFFFF</color>
 
 </resources>

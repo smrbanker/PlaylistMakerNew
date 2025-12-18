@@ -27,4 +27,13 @@
     <string name="country">Страна</string>
     <string name="favourite_tracks">Избранные треки</string>
     <string name="favourite_playlist">Плейлисты</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="playlist_name">Название*</string>
+    <string name="playlist_description">Описание</string>
+    <string name="create">Создать</string>
+    <string name="go_out">Завершить создание плейлиста?</string>
+    <string name="lost_data">Все несохраненные данные будут потеряны</string>
+    <string name="cancel_button">Отмена</string>
+    <string name="end_button">Завершить</string>
+    <string name="add_playlist">Добавить в плейлист</string>
 </resources>

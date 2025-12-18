@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.media.ui
+package com.practicum.playlistmaker.media.ui.track
 
 import android.view.View
 import android.widget.ImageView
@@ -11,7 +11,7 @@ import com.practicum.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class MediaViewHolderTrack(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     private val songLogo: ImageView = itemView.findViewById(R.id.search_track_image)
     private val songName: TextView = itemView.findViewById(R.id.search_track_song)

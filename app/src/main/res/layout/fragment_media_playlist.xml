@@ -12,15 +12,21 @@
         android:textColor="@color/black" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/search_button_wrong"
+        android:id="@+id/new_playlist"
         android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
         app:cornerRadius="54dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:backgroundTint="@color/search_not_found"
         app:icon="@drawable/new_playlist_text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp" />
 
     <ImageView
         android:id="@+id/search_image_not_found"

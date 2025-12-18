@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.media.ui
+package com.practicum.playlistmaker.media.ui.track
 
 import com.practicum.playlistmaker.search.domain.Track
 
