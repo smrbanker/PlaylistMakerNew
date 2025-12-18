@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.media.ui.track
+package com.practicum.playlistmaker.media.ui
 
 import android.content.Context
 import androidx.lifecycle.LiveData
