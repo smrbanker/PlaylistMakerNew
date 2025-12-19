@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.media.ui
+package com.practicum.playlistmaker.media.ui.track
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMediaTrackBinding
+import com.practicum.playlistmaker.media.ui.track.MediaViewModelTrack
 import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.Track
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.getValue
 
 class MediaTrackFragment : Fragment() {
 
@@ -28,7 +28,7 @@ class MediaTrackFragment : Fragment() {
 
     private var _binding: FragmentMediaTrackBinding? = null
     private val binding get() = _binding!!
-    private var adapter: MediaAdapter? = null
+    private var adapter: MediaAdapterTrack? = null
     private lateinit var imageView: ImageView
     private lateinit var textView: TextView
     private lateinit var favouriteList: RecyclerView
@@ -41,7 +41,7 @@ class MediaTrackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = MediaAdapter(trackList, onTrackClick = { trackID ->
+        adapter = MediaAdapterTrack(trackList, onTrackClick = { trackID ->
             callPlayerActivity(trackID)
         })
 
@@ -94,8 +94,9 @@ class MediaTrackFragment : Fragment() {
     fun callPlayerActivity (trackID : Track) {
         val gson : Gson by inject()
         val trackJson: String = gson.toJson(trackID)
-        findNavController().navigate(R.id.action_mediaFragment_to_playerFragment,
-            PlayerFragment.createArgs(trackJson))
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_playerFragment,
+            PlayerFragment.Companion.createArgs(trackJson))
     }
 
     companion object {
