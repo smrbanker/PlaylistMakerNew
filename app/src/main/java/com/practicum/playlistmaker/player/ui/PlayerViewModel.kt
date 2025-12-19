@@ -172,6 +172,7 @@ class PlayerViewModel (
         return current
     }
 
+
     companion object {
         const val STATE_DEFAULT = 0
         const val STATE_PREPARED = 1

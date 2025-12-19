@@ -8,5 +8,4 @@ interface PlaylistsInteractor {
     suspend fun addPlaylist(playlist: Playlist)
     fun getPlaylists(): Flow<List<Playlist>>
     suspend fun addTrackToPlaylist(track: Track, playlist: Playlist)
-
 }

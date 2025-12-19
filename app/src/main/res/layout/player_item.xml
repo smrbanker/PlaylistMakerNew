@@ -31,7 +31,7 @@
             android:fontFamily="@font/ys_display_regular"
             android:fontWeight="400"
             android:textColor="@color/set_font"
-        />
+            />
 
         <TextView
             android:id="@+id/playlistInfo"
@@ -43,6 +43,6 @@
             android:fontFamily="@font/ys_display_regular"
             android:fontWeight="400"
             android:textColor="@color/graywhite"
-        />
+            />
     </LinearLayout>
 </FrameLayout>

@@ -29,7 +29,7 @@ class MediaCreatePlaylistFragment : Fragment() {
     var dialog : MaterialAlertDialogBuilder? = null
     val viewModel by viewModel<MediaViewModelCreatePlaylist>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentNewPlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -9,7 +9,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistItemBinding
 import com.practicum.playlistmaker.search.domain.Playlist
-
 class MediaViewHolderPlaylist(private val binding: PlaylistItemBinding): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model : Playlist) = with(binding) {
@@ -24,10 +23,10 @@ class MediaViewHolderPlaylist(private val binding: PlaylistItemBinding): Recycle
 
     private fun countTracks(countTrack: Int) : String {
         return  if (countTrack % 10 == 1) { "$countTrack трек" }
-                else {  if ((countTrack % 10 == 2) or (countTrack % 10 == 3) or (countTrack % 10 == 4)) { "$countTrack трека" }
-                        else    if ((countTrack == 11) or (countTrack == 12) or (countTrack == 13) or (countTrack == 14)) { "$countTrack треков" }
-                                else { "$countTrack треков" }
-                     }
+        else {  if ((countTrack % 10 == 2) or (countTrack % 10 == 3) or (countTrack % 10 == 4)) { "$countTrack трека" }
+        else    if ((countTrack == 11) or (countTrack == 12) or (countTrack == 13) or (countTrack == 14)) { "$countTrack треков" }
+        else { "$countTrack треков" }
+        }
     }
 
     fun setImage(itemView: Context, trackImage: String?, trackUrl: ImageView, placeholder: Int, dp: Int) {

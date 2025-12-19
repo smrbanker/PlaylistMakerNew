@@ -25,7 +25,7 @@ class MediaPlaylistFragment : Fragment() {
     private val playlistList = ArrayList<Playlist>()
     private lateinit var playlistGrid: RecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMediaPlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }

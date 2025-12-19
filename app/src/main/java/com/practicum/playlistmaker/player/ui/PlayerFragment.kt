@@ -114,8 +114,8 @@ class PlayerFragment : Fragment() {
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
-                        BottomSheetBehavior.STATE_HIDDEN -> binding.overlay.visibility = View.GONE
-                        else -> {  binding.overlay.visibility = View.VISIBLE  }
+                    BottomSheetBehavior.STATE_HIDDEN -> binding.overlay.visibility = View.GONE
+                    else -> {  binding.overlay.visibility = View.VISIBLE  }
                 }
             }
             override fun onSlide(bottomSheet: View, slideOffset: Float) { }
@@ -161,7 +161,7 @@ class PlayerFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().popBackStack()
-                }
+            }
         })
     }
 
@@ -200,5 +200,3 @@ class PlayerFragment : Fragment() {
         fun createArgs(extra: String): Bundle = bundleOf(EXTRA to extra)
     }
 }
-
-
