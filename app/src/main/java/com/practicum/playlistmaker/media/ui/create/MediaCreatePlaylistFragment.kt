@@ -60,7 +60,7 @@ class MediaCreatePlaylistFragment : Fragment() {
         binding.hintName.doOnTextChanged {
                 text, _, _, _ ->
             playlistName = text?.toString()
-            if(playlistName?.isNotEmpty() == true) {
+            if(!playlistName.isNullOrBlank()) {
                 @Suppress("DEPRECATION")
                 binding.createPlaylistButton.setBackgroundColor(resources.getColor(R.color.blue))
                 binding.createPlaylistButton.setBackgroundDrawable(resources.getDrawable(R.drawable.button_pressed))
@@ -76,7 +76,7 @@ class MediaCreatePlaylistFragment : Fragment() {
         }
 
         binding.backButton.setOnClickListener {
-            if((playlistUri != null) or (playlistName?.isNotEmpty() == true) or (playlistDescription?.isNotEmpty() == true )) {
+            if((playlistUri != null) or (!playlistName.isNullOrBlank()) or (playlistDescription?.isNotEmpty() == true )) {
                 dialog?.show()
             } else {
                 findNavController().navigateUp()
@@ -85,7 +85,7 @@ class MediaCreatePlaylistFragment : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if ((playlistUri != null) or (playlistName?.isNotEmpty() == true) or (playlistDescription?.isNotEmpty() == true)) {
+                if ((playlistUri != null) or (!playlistName.isNullOrBlank()) or (playlistDescription?.isNotEmpty() == true)) {
                     dialog?.show()
                 } else {
                     findNavController().navigateUp()
@@ -94,7 +94,7 @@ class MediaCreatePlaylistFragment : Fragment() {
         })
 
         binding.createPlaylistButton.setOnClickListener {
-            if(playlistName?.isNotEmpty() == true) {
+            if(!playlistName.isNullOrBlank()) {
                 if(playlistUri != null) {
                     lifecycleScope.launch {
                         viewModel.insertPlaylist(playlistName!!, playlistDescription, playlistUri.toString())
