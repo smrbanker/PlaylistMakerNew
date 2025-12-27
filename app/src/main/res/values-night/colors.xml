@@ -29,5 +29,6 @@
     <color name="bottom_menu_icon_false">#FFFFFF</color>
     <color name="bottom_menu_icon_true">#3772E7</color>
     <color name="graywhite">#FFFFFF</color>
+    <color name="rectangle">#FFFFFF</color>
 
 </resources>
