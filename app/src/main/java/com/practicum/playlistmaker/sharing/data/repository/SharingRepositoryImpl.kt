@@ -17,4 +17,8 @@ class SharingRepositoryImpl(val context : Context) : SharingRepository {
     }
 
     override fun getTermsLink(): String { return context.getString(R.string.agreement) }
+
+    override fun getSharePlaylist(str: String): String {
+        return str
+    }
 }

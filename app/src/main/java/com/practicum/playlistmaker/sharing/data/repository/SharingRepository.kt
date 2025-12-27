@@ -6,4 +6,5 @@ interface SharingRepository {
     fun getShareAppLink():String
     fun getSupportEmailData(): EmailData
     fun getTermsLink():String
+    fun getSharePlaylist(str: String):String
 }

@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
+import com.practicum.playlistmaker.media.ui.create.MediaCreatePlaylistFragment
 import com.practicum.playlistmaker.media.ui.playlist.MediaStatePlaylist
 import com.practicum.playlistmaker.search.domain.Playlist
 import com.practicum.playlistmaker.search.domain.Track
@@ -143,7 +144,9 @@ class PlayerFragment : Fragment() {
         }
 
         binding.newButton.setOnClickListener {
-            findNavController().navigate(R.id.action_playerFragment_to_mediaCreatePlaylistFragment)
+            findNavController().navigate(R.id.action_playerFragment_to_mediaCreatePlaylistFragment,
+                MediaCreatePlaylistFragment.createArgs(null)
+            )
         }
 
         viewModel.observeCheckInfo().observe(viewLifecycleOwner) {
