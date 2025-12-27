@@ -83,6 +83,7 @@ class MediaDetailsFragment : Fragment() {
         else {
             playlistList.visibility = View.GONE
             binding.detailsEmptyList.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), R.string.empty_tracks, Toast.LENGTH_SHORT).show()
         }
 
         binding.detailsBack.setOnClickListener {

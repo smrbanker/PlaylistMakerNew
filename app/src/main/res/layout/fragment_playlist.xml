@@ -151,7 +151,7 @@
             android:textColor="@color/blbl"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="12dp"
-            android:text="@string/empty_tracks"
+            android:text=""
             tools:visibility="gone"
              />
 

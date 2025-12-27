@@ -144,6 +144,7 @@ class PlayerFragment : Fragment() {
         }
 
         binding.newButton.setOnClickListener {
+            viewModel.pausePlayer()
             findNavController().navigate(R.id.action_playerFragment_to_mediaCreatePlaylistFragment,
                 MediaCreatePlaylistFragment.createArgs(null)
             )
