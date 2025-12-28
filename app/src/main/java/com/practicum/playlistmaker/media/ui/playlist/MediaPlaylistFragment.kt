@@ -8,11 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMediaPlaylistBinding
+import com.practicum.playlistmaker.media.ui.create.MediaCreatePlaylistFragment
+import com.practicum.playlistmaker.media.ui.details.MediaDetailsFragment
 import com.practicum.playlistmaker.search.domain.Playlist
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.getValue
 
 class MediaPlaylistFragment : Fragment() {
 
@@ -34,13 +39,14 @@ class MediaPlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.newPlaylist.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_mediaFragment_to_mediaCreatePlaylistFragment
-                //,PlayerFragment.createArgs(trackJson)
+            findNavController().navigate(R.id.action_mediaFragment_to_mediaCreatePlaylistFragment,
+                MediaCreatePlaylistFragment.createArgs(null)
             )
         }
 
-        adapter = MediaAdapterPlaylist(playlistList, onPlaylistClick = { playlistID -> })
+        adapter = MediaAdapterPlaylist(playlistList, onPlaylistClick = { playlist ->
+            callDetails(playlist)
+        })
 
         playlistGrid = binding.recyclerView
         playlistGrid.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -51,6 +57,14 @@ class MediaPlaylistFragment : Fragment() {
         playlistViewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
+    }
+
+    fun callDetails (playlist: Playlist) {
+        val gson : Gson by inject()
+        val playlistJson: String = gson.toJson(playlist)
+        findNavController().navigate(R.id.action_mediaFragment_to_mediaDetailsFragment,
+            MediaDetailsFragment.createArgs(playlistJson)
+        )
     }
 
     override fun onDestroyView() {
@@ -72,6 +86,7 @@ class MediaPlaylistFragment : Fragment() {
         binding.searchImageNotFound.visibility = View.VISIBLE
         binding.emptyPlaylist.visibility = View.VISIBLE
         binding.emptyPlaylist.text = getString(R.string.empty_playlist)
+        playlistGrid.visibility = View.GONE
     }
 
     private fun showContent(playlist: List<Playlist>) {
